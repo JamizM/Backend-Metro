@@ -6,6 +6,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -66,8 +68,10 @@ public class Roles {
                         .requestMatchers(HttpMethod.GET,"/api/Extinguishers/**").hasAnyRole("EMPLOYEE","ADMINISTRATOR","USER","MAINTENANCE")
                         .requestMatchers(HttpMethod.POST,"/api/Extinguishers").hasAnyRole("ADMINISTRATOR","MAINTENANCE")
                         .requestMatchers(HttpMethod.DELETE, "/api/Extinguishers/**").hasAnyRole("ADMINISTRATOR","MAINTENANCE")
-                        .requestMatchers(HttpMethod.PUT,"/api/Extinguishers/**").hasAnyRole("ADMINISTRATOR","EMPLOYEE","MAINTENANCE"));
+                        .requestMatchers(HttpMethod.PUT,"/api/Extinguishers/**").hasAnyRole("ADMINISTRATOR","EMPLOYEE","MAINTENANCE")
+                        .requestMatchers("/api/h2-console/**").permitAll().anyRequest().authenticated());
         http.httpBasic(Customizer.withDefaults());
+        http.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
