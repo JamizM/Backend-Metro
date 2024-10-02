@@ -15,9 +15,10 @@ public class HistoricManutention {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @ManyToOne
     @NotNull
-    @JoinColumn(name="localization_id")
-    private String extinguisherId;
+    @JoinColumn(name="extinguisher_id")
+    private Extinguisher extinguisherId;
 
     @NotNull
     @Column(name="maintance_data")

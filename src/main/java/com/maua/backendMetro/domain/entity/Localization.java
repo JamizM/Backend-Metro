@@ -4,13 +4,14 @@ import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name="localization")
+@Entity
 public class Localization {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

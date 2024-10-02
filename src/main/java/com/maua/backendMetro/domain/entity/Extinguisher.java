@@ -42,16 +42,17 @@ public class Extinguisher {
 
     @Column(name="next_inspection")
     @NotNull
-    private String  nextInspection;
+    private String nextInspection;
 
     @Column(name="extinguisher_status")
     @Enumerated(EnumType.STRING)
     @NotNull
     private ExtinguisherStatus extinguisherStatus;
 
+    @ManyToOne
     @JoinColumn(name="localization_id")
     @NotNull
-    private Integer localizationId; // chave estrangeira para a tabela de localização
+    private Localization localizationId; // chave estrangeira para a tabela de localização
 
     //qrcode
     //observacoes
