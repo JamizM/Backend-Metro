@@ -36,9 +36,9 @@ public class Extinguisher {
     @Column(name="lastRecharge_date")
     private String lastRechargeDate;
 
-    @Column(name="numero_equipe")
+    @Column(name="team_code")
     @NotNull
-    private Integer numeroEquipe;
+    private Integer teamCode;
 
     @Column(name="next_inspection")
     @NotNull
