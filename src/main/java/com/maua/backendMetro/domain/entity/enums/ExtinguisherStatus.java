@@ -1,4 +1,4 @@
-package com.maua.backendMetro.entity.enums;
+package com.maua.backendMetro.domain.entity.enums;
 
 public enum ExtinguisherStatus {
     OK,

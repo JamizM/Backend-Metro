@@ -1,10 +1,9 @@
-package com.maua.backendMetro.entity;
+package com.maua.backendMetro.domain.entity;
 
-import com.maua.backendMetro.entity.enums.ExtinguisherStatus;
-import com.maua.backendMetro.entity.enums.ExtinguisherType;
+import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
+import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import jakarta.persistence.*;
 import lombok.*;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Getter
@@ -18,6 +17,7 @@ public class Extinguisher {
     private String extinguisherId;
 
     @Column(name="extinguisher_type")
+    @Enumerated(EnumType.STRING)
     @NotNull
     private ExtinguisherType extinguisherType;
 
@@ -40,6 +40,7 @@ public class Extinguisher {
     private String  nextInspection;
 
     @Column(name="extinguisher_status")
+    @Enumerated(EnumType.STRING)
     @NotNull
     private ExtinguisherStatus extinguisherStatus;
 

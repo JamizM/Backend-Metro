@@ -1,4 +1,4 @@
-package com.maua.backendMetro.entity;
+package com.maua.backendMetro.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

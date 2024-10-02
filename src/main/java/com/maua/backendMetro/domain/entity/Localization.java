@@ -1,6 +1,6 @@
-package com.maua.backendMetro.entity;
+package com.maua.backendMetro.domain.entity;
 
-import com.maua.backendMetro.entity.enums.SubwayStation;
+import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -21,6 +21,7 @@ public class Localization {
     private Integer area;
 
     @Column(name="subway_station")
+    @Enumerated(EnumType.STRING)
     @NotNull
     private SubwayStation subwayStation;
 
