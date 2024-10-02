@@ -1,10 +1,10 @@
 package com.maua.backendMetro.domain.entity;
 
+import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
@@ -18,8 +18,9 @@ public class Localization {
     private Integer LocalizationId;
 
     @Column(name="area")
+    @Enumerated(EnumType.STRING)
     @NotNull
-    private Integer area;
+    private MetroLine area;
 
     @Column(name="subway_station")
     @Enumerated(EnumType.STRING)
