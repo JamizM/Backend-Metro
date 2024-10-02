@@ -36,7 +36,12 @@ public class Extinguisher {
     @Column(name="lastRecharge_date")
     private String lastRechargeDate;
 
+    @Column(name="numero_equipe")
+    @NotNull
+    private Integer numeroEquipe;
+
     @Column(name="next_inspection")
+    @NotNull
     private String  nextInspection;
 
     @Column(name="extinguisher_status")
