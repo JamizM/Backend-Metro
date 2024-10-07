@@ -2,6 +2,7 @@ package com.maua.backendMetro.domain.entity;
 
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
+import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.validation.constraints.NotNull;
@@ -23,7 +24,7 @@ public class Extinguisher {
 
     @Column(name = "capacity")
     @NotNull
-    private int capacity;
+    private Integer capacity;
 
     @Column(name = "manufacturer_code")
     @NotNull
@@ -39,7 +40,7 @@ public class Extinguisher {
 
     @Column(name = "team_code")
     @NotNull
-    private int teamCode;
+    private Integer teamCode;
 
     @Column(name = "next_inspection")
     @NotNull
@@ -50,8 +51,20 @@ public class Extinguisher {
     private ExtinguisherStatus extinguisherStatus;
 
     @ManyToOne
+    @JoinColumn(name = "historic_manutention", referencedColumnName = "historic_manutention_id")
+    private HistoricManutention historicManutention;
+
+    @ManyToOne
     @JoinColumn(name = "localization_id", referencedColumnName = "LocalizationId")
-    private Localization localization; //// chave estrangeira para a tabela de localização
+    private Localization localization;
+
+    public Extinguisher(ExtinguisherDTO dto) {
+        this.extinguisherId = dto.getExtinguisherId();
+        this.expirationDate = dto.getExpirationDate();
+        this.nextInspection = dto.getNextInspection();
+        this.extinguisherStatus = dto.getExtinguisherStatus();
+        this.localization = dto.getLocalization();
+    }
 }
 
     //qrcode
