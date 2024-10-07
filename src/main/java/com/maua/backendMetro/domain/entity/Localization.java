@@ -15,6 +15,7 @@ import lombok.*;
 public class Localization {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="LocalizationId")
     private Integer LocalizationId;
 
     @Column(name="area")

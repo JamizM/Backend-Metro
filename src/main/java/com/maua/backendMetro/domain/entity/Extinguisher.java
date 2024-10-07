@@ -11,50 +11,49 @@ import jakarta.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="extinguishers")
+@Table(name = "extinguisher")
 public class Extinguisher {
     @Id
+    @Column(name = "extinguisher_id")
     private String extinguisherId;
 
-    @Column(name="extinguisher_type")
-    @Enumerated(EnumType.STRING)
+    @Column(name = "extinguisher_type")
     @NotNull
     private ExtinguisherType extinguisherType;
 
-    @Column(name="capacity")
+    @Column(name = "capacity")
     @NotNull
-    private Integer capacity;
+    private int capacity;
 
-    @Column(name="manufacturer_code")
+    @Column(name = "manufacturer_code")
     @NotNull
     private String manufacturerCode;
 
-    @Column(name="expiration_date")
+    @Column(name = "expiration_date")
     @NotNull
     private String expirationDate;
 
-    @Column(name="lastRecharge_date")
+    @Column(name = "last_recharge_date")
+    @NotNull
     private String lastRechargeDate;
 
-    @Column(name="team_code")
+    @Column(name = "team_code")
     @NotNull
-    private Integer teamCode;
+    private int teamCode;
 
-    @Column(name="next_inspection")
+    @Column(name = "next_inspection")
     @NotNull
     private String nextInspection;
 
-    @Column(name="extinguisher_status")
-    @Enumerated(EnumType.STRING)
+    @Column(name = "extinguisher_status")
     @NotNull
     private ExtinguisherStatus extinguisherStatus;
 
     @ManyToOne
-    @JoinColumn(name="localization_id")
-    @NotNull
-    private Localization localizationId; // chave estrangeira para a tabela de localização
+    @JoinColumn(name = "localization_id", referencedColumnName = "LocalizationId")
+    private Localization localization; //// chave estrangeira para a tabela de localização
+}
 
     //qrcode
     //observacoes
 
-}

@@ -22,9 +22,4 @@ public class ExtinguisherController {
     public List<Extinguisher> getExtinguishers(){
         return extinguishers.findAll();
     }
-
-
-
-
-
 }
