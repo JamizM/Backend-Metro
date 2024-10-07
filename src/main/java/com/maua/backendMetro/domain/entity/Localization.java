@@ -10,13 +10,11 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="localization")
 @Entity
 public class Localization {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="LocalizationId")
-    private Integer LocalizationId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name="area")
     @Enumerated(EnumType.STRING)

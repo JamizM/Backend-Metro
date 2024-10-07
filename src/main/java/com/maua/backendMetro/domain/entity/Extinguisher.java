@@ -12,11 +12,9 @@ import jakarta.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "extinguisher")
 public class Extinguisher {
     @Id
-    @Column(name = "extinguisher_id")
-    private String extinguisherId;
+    private String id;
 
     @Column(name = "extinguisher_type")
     @NotNull
@@ -51,20 +49,8 @@ public class Extinguisher {
     private ExtinguisherStatus extinguisherStatus;
 
     @ManyToOne
-    @JoinColumn(name = "historic_manutention", referencedColumnName = "historic_manutention_id")
-    private HistoricManutention historicManutention;
-
-    @ManyToOne
-    @JoinColumn(name = "localization_id", referencedColumnName = "LocalizationId")
+    @JoinColumn(name = "localization_id", nullable = false)
     private Localization localization;
-
-    public Extinguisher(ExtinguisherDTO dto) {
-        this.extinguisherId = dto.getExtinguisherId();
-        this.expirationDate = dto.getExpirationDate();
-        this.nextInspection = dto.getNextInspection();
-        this.extinguisherStatus = dto.getExtinguisherStatus();
-        this.localization = dto.getLocalization();
-    }
 }
 
     //qrcode

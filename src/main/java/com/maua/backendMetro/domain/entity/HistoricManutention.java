@@ -4,21 +4,22 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "historic_manutention")
 public class HistoricManutention {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "historic_manutention_id")
-    private Long historicManutentionId;
+    private Long id;
 
+    @ManyToOne
     @NotNull
-    @Column(name = "extinguisher_id")
-    private String extinguisherId;
+    @JoinColumn(name = "extinguisher_id")
+    private Extinguisher extinguisher;
 
     @NotNull
     @Column(name="maintenance_date")

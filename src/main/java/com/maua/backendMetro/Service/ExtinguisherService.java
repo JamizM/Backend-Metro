@@ -10,4 +10,6 @@ public interface ExtinguisherService {
     List<Extinguisher> expirationAlert(ExtinguisherDTO extinguisherDTO);
 
     List<Extinguisher> nextInspectionAlert(ExtinguisherDTO extinguisherDTO);
+
+    public Extinguisher createExtinguisher(ExtinguisherDTO extinguisherDTO);
 }
