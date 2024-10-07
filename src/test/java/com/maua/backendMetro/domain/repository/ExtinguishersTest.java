@@ -21,10 +21,4 @@ class ExtinguishersTest {
     void findExtinguisherByLocalization() {
 
     }
-
-    private Extinguisher createExtinguisher(ExtinguisherDTO dto){
-        Extinguisher extinguisher = new Extinguisher(dto);
-        return extinguisher;
-    }
-
 }

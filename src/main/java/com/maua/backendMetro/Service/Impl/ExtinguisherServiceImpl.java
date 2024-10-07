@@ -2,9 +2,11 @@ package com.maua.backendMetro.Service.Impl;
 
 import com.maua.backendMetro.Service.ExtinguisherService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
+import com.maua.backendMetro.domain.entity.Localization;
 import com.maua.backendMetro.domain.repository.Extinguishers;
 import com.maua.backendMetro.domain.repository.Localizations;
 import com.maua.backendMetro.domain.repository.Users;
+import com.maua.backendMetro.exception.EntityNotFoundException;
 import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import com.maua.backendMetro.exception.RegraNegocioException;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,7 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     @Override
     @Transactional
     public List<Extinguisher> expirationAlert(ExtinguisherDTO extinguisherDTO) {
-        String exinguisherId = extinguisherDTO.getExtinguisherId();
+        String exinguisherId = extinguisherDTO.getId();
         Extinguisher extinguisherDB = extinguishers.findById(exinguisherId)
                 .orElseThrow(() -> new RegraNegocioException("Extintor não encontrado"));
 
@@ -59,5 +61,16 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     @Transactional
     public List<Extinguisher> nextInspectionAlert(ExtinguisherDTO extinguisherDTO) {
         return List.of();
+    }
+
+    @Override
+    public Extinguisher createExtinguisher(ExtinguisherDTO extinguisherDTO) {
+        Localization localization = localizations.findById(extinguisherDTO.getLocalizationId())
+                .orElseThrow(() -> new EntityNotFoundException("Localization not found"));
+
+        Extinguisher extinguisher = new Extinguisher();
+        extinguisher.setLocalization(localization);
+
+        return extinguishers.save(extinguisher);
     }
 }
