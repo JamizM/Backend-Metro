@@ -1,12 +1,13 @@
 package com.maua.backendMetro.Service;
 
 import com.maua.backendMetro.domain.entity.Extinguisher;
+import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 
 import java.util.List;
 
 public interface ExtinguisherService {
 
-    public  List<Extinguisher> expirationAlert(Extinguisher extinguisher);
+    List<Extinguisher> expirationAlert(ExtinguisherDTO extinguisherDTO);
 
-    public List<Extinguisher> nextInspectionAlert(Extinguisher extinguisher);
+    List<Extinguisher> nextInspectionAlert(ExtinguisherDTO extinguisherDTO);
 }

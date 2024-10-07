@@ -5,6 +5,7 @@ import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.repository.Extinguishers;
 import com.maua.backendMetro.domain.repository.Localizations;
 import com.maua.backendMetro.domain.repository.Users;
+import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import com.maua.backendMetro.exception.RegraNegocioException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-@RequiredArgsConstructor //gera contrutor com argumentos final
+@RequiredArgsConstructor
 @Service
 public class ExtinguisherServiceImpl implements ExtinguisherService {
 
@@ -25,20 +26,20 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
 
     @Override
     @Transactional
-    public List<Extinguisher> expirationAlert(Extinguisher extinguisher) {
-        String exinguisherId = extinguisher.getExtinguisherId();
+    public List<Extinguisher> expirationAlert(ExtinguisherDTO extinguisherDTO) {
+        String exinguisherId = extinguisherDTO.getExtinguisherId();
         Extinguisher extinguisherDB = extinguishers.findById(exinguisherId)
                 .orElseThrow(() -> new RegraNegocioException("Extintor não encontrado"));
 
-        String expirationDateExtinguisher = extinguisher.getExpirationDate();
+        String expirationDateExtinguisher = extinguisherDTO.getExpirationDate();
         if(expirationDateExtinguisher.isEmpty()){
             throw new RegraNegocioException("Data de validade do extintor não informada");
         }
 
-        String nextInspectionExtinguisher = extinguisher.getNextInspection();
+        String nextInspectionExtinguisher = extinguisherDTO.getNextInspection();
         if (nextInspectionExtinguisher.isEmpty()) {
             throw new RegraNegocioException("Data da próxima inspeção do extintor não informada");
-        } else if (nextInspectionExtinguisher.compareTo(expirationDateExtinguisher) > 0) { //verificamos se a data da próxima inspeção lexicograficamente
+        } else if (nextInspectionExtinguisher.compareTo(expirationDateExtinguisher) > 0) {
             throw new RegraNegocioException("Data da próxima inspeção do extintor não pode ser maior que a data de validade");
         }
 
@@ -56,7 +57,7 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
 
     @Override
     @Transactional
-    public List<Extinguisher> nextInspectionAlert(Extinguisher extinguisher) {
+    public List<Extinguisher> nextInspectionAlert(ExtinguisherDTO extinguisherDTO) {
         return List.of();
     }
 }
