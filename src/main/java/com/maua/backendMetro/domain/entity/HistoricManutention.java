@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.List;
 public class HistoricManutention {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @NotNull
@@ -23,7 +24,7 @@ public class HistoricManutention {
 
     @NotNull
     @Column(name="maintenance_date")
-    private String maintenanceData;
+    private LocalDate maintenanceData;
 
     @Column(name="description")
     private String description;

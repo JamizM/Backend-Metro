@@ -2,10 +2,11 @@ package com.maua.backendMetro.domain.entity;
 
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
-import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class Extinguisher {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
 
     @Column(name = "extinguisher_type")
@@ -26,15 +28,15 @@ public class Extinguisher {
 
     @Column(name = "manufacturer_code")
     @NotNull
-    private String manufacturerCode;
+    private LocalDate manufacturerCode;
 
     @Column(name = "expiration_date")
     @NotNull
-    private String expirationDate;
+    private LocalDate expirationDate;
 
     @Column(name = "last_recharge_date")
     @NotNull
-    private String lastRechargeDate;
+    private LocalDate lastRechargeDate;
 
     @Column(name = "team_code")
     @NotNull
@@ -42,14 +44,14 @@ public class Extinguisher {
 
     @Column(name = "next_inspection")
     @NotNull
-    private String nextInspection;
+    private LocalDate nextInspection;
 
     @Column(name = "extinguisher_status")
     @NotNull
     private ExtinguisherStatus extinguisherStatus;
 
     @ManyToOne
-    @JoinColumn(name = "localization_id", nullable = false)
+    @JoinColumn(name = "id_localization", nullable = false)
     private Localization localization;
 }
 

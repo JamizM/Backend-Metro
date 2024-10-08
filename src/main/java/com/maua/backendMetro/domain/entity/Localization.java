@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,6 +27,13 @@ public class Localization {
     @Enumerated(EnumType.STRING)
     @NotNull
     private SubwayStation subwayStation;
+
+    @Column(name="detailed_location")
+    @NotNull
+    private String detailedLocation;
+
+    @OneToMany(mappedBy = "localization")
+    private List<Extinguisher> extinguisherList;
 
     //local detalhado
     //observacoes
