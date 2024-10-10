@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @RepositoryRestResource(path = "Localizations")
 @Repository
-public interface Localizations  extends JpaRepository<Localization, Integer> {
+public interface Localizations  extends JpaRepository<Localization, Long> {
 }

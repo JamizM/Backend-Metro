@@ -1,11 +1,9 @@
 package com.maua.backendMetro.domain.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
@@ -15,21 +13,18 @@ import java.util.List;
 public class HistoricManutention {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long idManutention;
 
     @ManyToOne
-    @NotNull
-    @JoinColumn(name = "extinguisher_id")
+    @JoinColumn(name = "id_extinguisher")
     private Extinguisher extinguisher;
 
-    @NotNull
-    @Column(name="maintenance_date")
+    @Column(name="maintenance_date", nullable = false)
     private LocalDate maintenanceData;
 
     @Column(name="description")
     private String description;
 
-    @NotNull
-    @Column(name="responsible")
+    @Column(name="responsible", nullable = false)
     private String responsible;
 }

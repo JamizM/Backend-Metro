@@ -16,7 +16,7 @@ import java.util.List;
 public class Localization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name="area")
     @Enumerated(EnumType.STRING)
@@ -32,9 +32,8 @@ public class Localization {
     @NotNull
     private String detailedLocation;
 
-    @OneToMany(mappedBy = "localization")
+    @OneToMany(mappedBy = "localization", fetch = FetchType.LAZY)
     private List<Extinguisher> extinguisherList;
 
-    //local detalhado
     //observacoes
 }

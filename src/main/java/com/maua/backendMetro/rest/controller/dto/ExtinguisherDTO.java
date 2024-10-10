@@ -20,6 +20,6 @@ public class ExtinguisherDTO {
     private ExtinguisherStatus extinguisherStatus;
 
     @NotNull(message = "Localization ID is required")
-    private Integer localizationId;
+    private Long localizationId;
 
 }

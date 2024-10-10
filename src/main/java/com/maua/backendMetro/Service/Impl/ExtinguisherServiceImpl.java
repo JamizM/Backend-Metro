@@ -54,13 +54,13 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
             throw new RegraNegocioException("A data de validade do extintor está a 12 meses ou menos de vencer");
         }
 
-        return List.of(extinguisherDB);
+        return List.of(extinguisherDB); //nao testado
     }
 
     @Override
     @Transactional
     public List<Extinguisher> nextInspectionAlert(ExtinguisherDTO extinguisherDTO) {
-        return List.of();
+        return List.of(); //nao testado
     }
 
     @Override
