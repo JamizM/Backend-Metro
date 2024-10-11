@@ -79,6 +79,7 @@ public class ExtinguisherController {
 
     //regras de negocio estara abaixo
     @GetMapping("/Search-Extinguisher-By-Localization")
+    @ResponseStatus(HttpStatus.OK)
     public Optional<Extinguisher> getExtinguisherByLocalizationDetails(
             @RequestParam(required = false) @NotNull(message = "{field.area.required-on-extinguisher-controller}")
             MetroLine area,
@@ -91,6 +92,7 @@ public class ExtinguisherController {
     }
 
     @GetMapping("/Search-Extinguisher-By-Expiration-Date")
+    @ResponseStatus(HttpStatus.OK)
     public List<String> alertExpirationDateOfExtinguisher() throws MessageWriterEntity {
         return extinguisherService.verifyExpirationDateExtinguisherAndAlert();
     }
