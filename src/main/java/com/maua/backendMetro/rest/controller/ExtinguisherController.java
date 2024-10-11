@@ -6,6 +6,8 @@ import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import com.maua.backendMetro.domain.repository.Extinguishers;
 import com.maua.backendMetro.exception.EntityNotFoundException;
+import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
+import com.maua.backendMetro.util.MessageWriterEntity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -86,5 +88,10 @@ public class ExtinguisherController {
             String detailedLocation) {
 
         return extinguisherService.findExtinguisherByLocalizationDetails(area, subwayStation, detailedLocation);
+    }
+
+    @GetMapping("/Search-Extinguisher-By-Expiration-Date")
+    public List<String> alertExpirationDateOfExtinguisher() throws MessageWriterEntity {
+        return extinguisherService.verifyExpirationDateExtinguisherAndAlert();
     }
 }

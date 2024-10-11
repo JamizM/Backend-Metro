@@ -9,6 +9,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RepositoryRestResource(path = "Extinguishers")
@@ -23,7 +24,4 @@ public interface Extinguishers extends JpaRepository<Extinguisher, String> {
             SubwayStation subwayStation,
             @RequestParam String detailedLocation
             );
-
-
-
 }
