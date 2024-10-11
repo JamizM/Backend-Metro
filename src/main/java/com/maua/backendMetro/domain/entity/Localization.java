@@ -5,6 +5,7 @@ import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Validated
 @Entity
 public class Localization {
     @Id
@@ -20,20 +22,16 @@ public class Localization {
 
     @Column(name="area")
     @Enumerated(EnumType.STRING)
-    @NotNull
+    @NotNull(message = "{field.area.required}")
     private MetroLine area;
 
     @Column(name="subway_station")
     @Enumerated(EnumType.STRING)
-    @NotNull
+    @NotNull(message = "{field.subway-station.required}")
     private SubwayStation subwayStation;
 
     @Column(name="detailed_location")
-    @NotNull
+    @NotNull(message = "{field.detailed-location.required}")
     private String detailedLocation;
-
-    @OneToMany(mappedBy = "localization", fetch = FetchType.LAZY)
-    private List<Extinguisher> extinguisherList;
-
     //observacoes
 }
