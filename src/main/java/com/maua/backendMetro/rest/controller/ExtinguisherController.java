@@ -2,11 +2,11 @@ package com.maua.backendMetro.rest.controller;
 
 import com.maua.backendMetro.Service.ExtinguisherService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
+import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import com.maua.backendMetro.domain.repository.Extinguishers;
 import com.maua.backendMetro.exception.EntityNotFoundException;
-import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import com.maua.backendMetro.util.MessageWriterEntity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -101,5 +101,27 @@ public class ExtinguisherController {
     @ResponseStatus(HttpStatus.OK)
     public List<String> alertExpirationDateOfExtinguisher() throws MessageWriterEntity {
         return extinguisherService.verifyExpirationDateExtinguisherAndAlert();
+    }
+
+
+    @GetMapping("/Search-Extinguisher-By-Status")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Extinguisher> getExtinguisherByStatus(@RequestParam(required = false) @NotNull(message = "{field.extinguisher-status.required}")
+            ExtinguisherStatus extinguisherStatus) {
+
+        if(extinguisherStatus != ExtinguisherStatus.EXPIRED &&
+                extinguisherStatus != ExtinguisherStatus.OK &&
+                extinguisherStatus != ExtinguisherStatus.MAINTENANCE &&
+                extinguisherStatus != ExtinguisherStatus.MISPLACED) {
+            throw new EntityNotFoundException("Extinguisher status not found");
+        }
+
+        List<Extinguisher> extinguisher = extinguisherService.findExtinguisherByExtinguisherStatus(extinguisherStatus);
+
+        if (extinguisher.isEmpty()) {
+            throw new EntityNotFoundException("Extinguisher not found for the given status");
+        }
+
+        return extinguisher;
     }
 }

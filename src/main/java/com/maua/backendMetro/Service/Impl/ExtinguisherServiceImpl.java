@@ -3,6 +3,7 @@ package com.maua.backendMetro.Service.Impl;
 import com.maua.backendMetro.Service.ExtinguisherService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.Localization;
+import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import com.maua.backendMetro.domain.repository.Extinguishers;
@@ -11,6 +12,7 @@ import com.maua.backendMetro.exception.EntityNotFoundException;
 import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +29,6 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
 
     private final Extinguishers extinguishers;
     private final Localizations localizations;
-
 
     @Override
     @Transactional
@@ -52,7 +53,8 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
         return extinguishers.findExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation(area, subwayStation, detailedLocation);
     }
 
-    protected void verifyIfNextInspectionIsLessThanExpirationDate(Extinguisher extinguisher) {
+    @Override
+    public void verifyIfNextInspectionIsLessThanExpirationDate(Extinguisher extinguisher) {
         LocalDate expirationDateExtinguisher = extinguisher.getExpirationDate();
         LocalDate nextInspectionExtinguisher = extinguisher.getNextInspection();
 
@@ -92,5 +94,10 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
             }
         }
         return messages;
+    }
+
+    @Override
+    public List<Extinguisher> findExtinguisherByExtinguisherStatus(ExtinguisherStatus extinguisherStatus) {
+        return extinguishers.findExtinguisherByExtinguisherStatus(extinguisherStatus);
     }
 }

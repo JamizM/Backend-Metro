@@ -1,6 +1,7 @@
 package com.maua.backendMetro.Service;
 
 import com.maua.backendMetro.domain.entity.Extinguisher;
+import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
@@ -23,5 +24,9 @@ public interface ExtinguisherService {
     );
 
     List<String> verifyExpirationDateExtinguisherAndAlert() throws MessageWriterEntity;
+
+    void verifyIfNextInspectionIsLessThanExpirationDate(Extinguisher extinguisher);
+
+    List<Extinguisher> findExtinguisherByExtinguisherStatus(@RequestParam ExtinguisherStatus extinguisherStatus);
 
 }
