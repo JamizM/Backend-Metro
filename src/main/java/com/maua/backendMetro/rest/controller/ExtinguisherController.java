@@ -88,7 +88,13 @@ public class ExtinguisherController {
             @RequestParam(required = false) @NotNull(message = "{field.detailed-location.required-on-extinguisher-controller}")
             String detailedLocation) {
 
-        return extinguisherService.findExtinguisherByLocalizationDetails(area, subwayStation, detailedLocation);
+        Optional<Extinguisher> extinguisher = extinguisherService.findExtinguisherByLocalizationDetails(area, subwayStation, detailedLocation);
+
+        if (extinguisher.isEmpty()) {
+            throw new EntityNotFoundException("Extinguisher not found for the given localization details");
+        }
+
+        return extinguisher;
     }
 
     @GetMapping("/Search-Extinguisher-By-Expiration-Date")
