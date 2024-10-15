@@ -52,14 +52,13 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
         return extinguishers.findExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation(area, subwayStation, detailedLocation);
     }
 
-    //adicionar uma funcao se caso uma inspeção nao ser depois de uma ultima recarga ou vice-versa, se caso precisar
-    //desta funcao, colocar na funcao "verifyExpirationDateExtinguisherAndAlert"
+    protected void verifyIfNextInspectionIsLessThanExpirationDate(Extinguisher extinguisher) {
+        LocalDate expirationDateExtinguisher = extinguisher.getExpirationDate();
+        LocalDate nextInspectionExtinguisher = extinguisher.getNextInspection();
 
-    protected void verifyIfNextInspectionIsLessThanExpirationDate(LocalDate nextInspectionExtinguisher,
-                                                                  LocalDate expirationDateExtinguisher) {
         //fazer funcao que retorna o id do extintor, porem este codigo funciona mesmo assim, dando erro 500
-        if (nextInspectionExtinguisher.isAfter(expirationDateExtinguisher)){
-            throw new IllegalArgumentException("The next inspection date cannot be after the expiration date.");
+        if (nextInspectionExtinguisher.isAfter(expirationDateExtinguisher)){ //se a data de inspecao for depois da data de expiracao, será lançada exceção
+            throw new IllegalArgumentException("The next inspection date cannot be after the expiration date, verify the exintiguisher with ID: " + extinguisher.getId());
         }
     }
 
@@ -75,20 +74,21 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
         List<String> messages = new ArrayList<>();
 
         for (Extinguisher extinguisher : extinguisherList) {
+
+            verifyIfNextInspectionIsLessThanExpirationDate(extinguisher);
+
             LocalDate expirationDate = extinguisher.getExpirationDate();
             LocalDate nextInspectionDate = extinguisher.getNextInspection();
-
-            verifyIfNextInspectionIsLessThanExpirationDate(nextInspectionDate, expirationDate); //testar se a funcao esta funcionando
 
             if(currentDate.isAfter(nextInspectionDate) || currentDate.isEqual(nextInspectionDate)) {
                 messages.add("The Extinguisher " + extinguisher.getId() + " is due for inspection, day: " + nextInspectionDate);
             }
 
             if (currentDate.isAfter(expirationDate) || currentDate.isEqual(expirationDate)) {
-                messages.add("The extinguisher with ID " + extinguisher.getId() + " has expired.");
+                messages.add("The Extinguisher with ID " + extinguisher.getId() + " has expired.");
             }
             else if (currentDate.plusMonths(12).isBefore(expirationDate)) {
-                messages.add("The extinguisher with ID " + extinguisher.getId() + " is within the expiration date.");
+                messages.add("The E xtinguisher with ID " + extinguisher.getId() + " is within the expiration date.");
             }
         }
         return messages;
