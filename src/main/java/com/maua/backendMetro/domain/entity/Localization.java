@@ -27,7 +27,6 @@ public class Localization {
 
     @Column(name="subway_station")
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "{field.subway-station.required}")
     private SubwayStation subwayStation;
 
     @Column(name="detailed_location")
