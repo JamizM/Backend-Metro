@@ -3,7 +3,6 @@ package com.maua.backendMetro.domain.entity;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;

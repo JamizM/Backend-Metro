@@ -124,4 +124,10 @@ public class ExtinguisherController {
 
         return extinguisher;
     }
+
+    @PostMapping("/Schedule-Regular-Inspections")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> scheduleRegularInspections(@RequestParam String extinguisherId) {
+        return extinguisherService.scheduleRegularInspectionsOfExtinguishers(extinguisherId);
+    }
 }

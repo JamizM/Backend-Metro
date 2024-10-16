@@ -29,4 +29,5 @@ public interface ExtinguisherService {
 
     List<Extinguisher> findExtinguisherByExtinguisherStatus(@RequestParam ExtinguisherStatus extinguisherStatus);
 
+    List<String> scheduleRegularInspectionsOfExtinguishers(String extinguisherId);
 }

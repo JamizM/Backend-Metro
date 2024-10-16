@@ -12,11 +12,11 @@ import com.maua.backendMetro.exception.EntityNotFoundException;
 import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.MessageSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -37,6 +37,7 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     }
 
     @Override
+    @Transactional
     public Extinguisher createExtinguisher(@NotNull ExtinguisherDTO extinguisherDTO) {
         Localization localization = localizations.findById(extinguisherDTO.getLocalizationId())
                 .orElseThrow(() -> new EntityNotFoundException("Localization not found"));
@@ -54,7 +55,7 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     }
 
     @Override
-    public void verifyIfNextInspectionIsLessThanExpirationDate(Extinguisher extinguisher) {
+    public void verifyIfNextInspectionIsLessThanExpirationDate(@NotNull Extinguisher extinguisher) {
         LocalDate expirationDateExtinguisher = extinguisher.getExpirationDate();
         LocalDate nextInspectionExtinguisher = extinguisher.getNextInspection();
 
@@ -65,6 +66,7 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     }
 
     @Override
+    @Transactional
     public List<String> verifyExpirationDateExtinguisherAndAlert() {
         List<Extinguisher> extinguisherList = extinguishers.findAll();
 
@@ -80,11 +82,6 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
             verifyIfNextInspectionIsLessThanExpirationDate(extinguisher);
 
             LocalDate expirationDate = extinguisher.getExpirationDate();
-            LocalDate nextInspectionDate = extinguisher.getNextInspection();
-
-            if(currentDate.isAfter(nextInspectionDate) || currentDate.isEqual(nextInspectionDate)) {
-                messages.add("The Extinguisher " + extinguisher.getId() + " is due for inspection, day: " + nextInspectionDate);
-            }
 
             if (currentDate.isAfter(expirationDate) || currentDate.isEqual(expirationDate)) {
                 messages.add("The Extinguisher with ID " + extinguisher.getId() + " has expired.");
@@ -99,5 +96,21 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     @Override
     public List<Extinguisher> findExtinguisherByExtinguisherStatus(ExtinguisherStatus extinguisherStatus) {
         return extinguishers.findExtinguisherByExtinguisherStatus(extinguisherStatus);
+    }
+
+    @Override
+    public List<String> scheduleRegularInspectionsOfExtinguishers(String extinguisherId) {
+        Optional<Extinguisher> optionalExtinguisher = extinguishers.findById(extinguisherId);
+        List<String> messages = new ArrayList<>();
+
+        if (optionalExtinguisher.isPresent()) {
+            Extinguisher extinguisher = optionalExtinguisher.get();
+            extinguisher.setNextInspection(extinguisher.getNextInspection().plusMonths(12));
+            extinguishers.save(extinguisher);
+            messages.add("Scheduled next inspection for extinguisher ID: "+ extinguisher.getId() + " on " + extinguisher.getNextInspection());
+        } else {
+            messages.add("Extinguisher with ID: " + extinguisherId + " not found");
+        }
+        return messages;
     }
 }
