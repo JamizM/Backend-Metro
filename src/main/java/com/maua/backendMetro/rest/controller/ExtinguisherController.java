@@ -83,15 +83,14 @@ public class ExtinguisherController {
     public Optional<Extinguisher> getExtinguisherByLocalizationDetails(
             @RequestParam(required = false) @NotNull(message = "{field.area.required-on-extinguisher-controller}")
             MetroLine area,
-            @RequestParam(required = false) @NotNull(message = "{field.subway-station.required-on-extinguisher-controller}")
             SubwayStation subwayStation,
             @RequestParam(required = false) @NotNull(message = "{field.detailed-location.required-on-extinguisher-controller}")
             String detailedLocation) {
 
         Optional<Extinguisher> extinguisher = extinguisherService.findExtinguisherByLocalizationDetails(area, subwayStation, detailedLocation);
 
-        if (extinguisher.isEmpty()) {
-            throw new EntityNotFoundException("Extinguisher not found for the given localization details");
+        if (extinguisher.isEmpty()) { //se algo dentro da variavel extinguisher for vazio
+            throw new EntityNotFoundException("Extinguisher not found for the given localization details, Verify the Subway Station");
         }
 
         return extinguisher;

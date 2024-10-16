@@ -39,7 +39,7 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     @Override
     @Transactional
     public Extinguisher createExtinguisher(@NotNull ExtinguisherDTO extinguisherDTO) {
-        Localization localization = localizations.findById(extinguisherDTO.getLocalizationId())
+        Localization localization = localizations.findById(extinguisherDTO.getLocalization().getId())
                 .orElseThrow(() -> new EntityNotFoundException("Localization not found"));
 
         Extinguisher extinguisher = new Extinguisher();
