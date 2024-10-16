@@ -1,8 +1,8 @@
 package com.maua.backendMetro.rest.controller;
 
-import com.maua.backendMetro.Service.Impl.HistoricManutentionImpl;
+import com.maua.backendMetro.Service.HistoricManutentionService;
+import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.HistoricManutention;
-import com.maua.backendMetro.domain.repository.Extinguishers;
 import com.maua.backendMetro.domain.repository.HistoricManutentions;
 import com.maua.backendMetro.exception.EntityNotFoundException;
 import com.maua.backendMetro.rest.controller.dto.HistoricManutentionDTO;
@@ -21,7 +21,7 @@ import java.util.List;
 public class HistoricManutentionController {
 
     private HistoricManutentions historicManutentions;
-    private HistoricManutentionImpl historicManutentionImpl;
+    private HistoricManutentionService historicManutentionService;
 
     @GetMapping
     public List<HistoricManutention> listAll() {
@@ -37,7 +37,7 @@ public class HistoricManutentionController {
 
     @PostMapping
     public HistoricManutention createHistoricManutention(@RequestBody @Valid HistoricManutentionDTO dto) {
-        HistoricManutention savedHistoricManutention = historicManutentionImpl.createHistoricManutention(dto);
+        HistoricManutention savedHistoricManutention = historicManutentionService.createHistoricManutention(dto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -68,8 +68,8 @@ public class HistoricManutentionController {
                 .orElseThrow(() -> new EntityNotFoundException("HistoricManutention not found"));
     }
 
-    @GetMapping("/extinguisher/{extinguisherId}")
-    public List<HistoricManutention> getHistoricManutentionByExtinguisherId(@PathVariable String extinguisherId) {
-        return historicManutentions.findHistoricManutentionByExtinguisherId(extinguisherId);
+    @GetMapping("/Find-Historic-Manutention-By-ExtinguisherId") //funcao dando erro de parse String para Long
+    public List<HistoricManutention> getHistoricManutentionByExtinguisherId(@RequestParam Extinguisher extinguisher) {
+        return historicManutentionService.findHistoricManutentionByExtinguisherId(extinguisher);
     }
 }

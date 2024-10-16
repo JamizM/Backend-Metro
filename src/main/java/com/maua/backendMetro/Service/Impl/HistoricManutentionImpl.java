@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -34,4 +34,10 @@ public class HistoricManutentionImpl implements HistoricManutentionService {
 
         return historicManutentions.save(historicManutention);
     }
+
+    @Override
+    public List<HistoricManutention> findHistoricManutentionByExtinguisherId(Extinguisher extinguisher) {
+        return historicManutentions.queryHistoricManutentionByExtinguisherId(extinguisher.getId());
+    }
+
 }
