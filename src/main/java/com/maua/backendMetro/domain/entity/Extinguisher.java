@@ -31,7 +31,7 @@ public class Extinguisher {
 
     @Column(name = "manufacturer_code", nullable = false)
     @NotNull(message = "{field.manufacturer-code.required}")
-    private LocalDate manufacturerCode;
+    private String manufacturerCode;
 
     @Column(name = "expiration_date", nullable = false)
     @NotNull(message = "{field.expiration-date.required}")
