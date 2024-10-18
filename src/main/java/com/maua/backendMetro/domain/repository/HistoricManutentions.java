@@ -1,4 +1,5 @@
 package com.maua.backendMetro.domain.repository;
+
 import com.maua.backendMetro.domain.entity.HistoricManutention;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,5 +12,5 @@ import java.util.List;
 @Repository
 public interface HistoricManutentions extends JpaRepository<HistoricManutention, Long> {
 
-    List<HistoricManutention> queryHistoricManutentionByExtinguisherId(String extinguisherId);
+    List<HistoricManutention> findHistoricManutentionByExtinguisherId(String extinguisher);
 }

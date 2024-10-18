@@ -1,7 +1,6 @@
 package com.maua.backendMetro.Service.Impl;
 
 import com.maua.backendMetro.Service.QRCodeService;
-import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.QRCode;
 import com.maua.backendMetro.domain.repository.QRCodeRepository;
 import lombok.RequiredArgsConstructor;

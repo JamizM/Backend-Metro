@@ -22,7 +22,7 @@ public class HistoricManutention {
     private Extinguisher extinguisher;
 
     @Column(name="maintenance_date", nullable = false)
-    private LocalDate maintenanceData;
+    private LocalDate maintenanceDate;
 
     @Column(name="description")
     private String description;
