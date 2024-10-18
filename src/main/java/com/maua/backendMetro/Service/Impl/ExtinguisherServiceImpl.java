@@ -1,6 +1,8 @@
 package com.maua.backendMetro.Service.Impl;
 
+import com.google.zxing.WriterException;
 import com.maua.backendMetro.Service.ExtinguisherService;
+import com.maua.backendMetro.Service.QRCodeService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.Localization;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
@@ -10,25 +12,33 @@ import com.maua.backendMetro.domain.repository.Extinguishers;
 import com.maua.backendMetro.domain.repository.Localizations;
 import com.maua.backendMetro.exception.EntityNotFoundException;
 import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+@Getter
 @Service
 public class ExtinguisherServiceImpl implements ExtinguisherService {
 
     private final Extinguishers extinguishers;
     private final Localizations localizations;
+    private final QRCodeService qrCodeService;
+
+    public ExtinguisherServiceImpl(Extinguishers extinguishers, Localizations localizations, @Qualifier("QRCodeServiceImpl") QRCodeService qrCodeService) {
+        this.extinguishers = extinguishers;
+        this.localizations = localizations;
+        this.qrCodeService = qrCodeService;
+    }
 
     @Override
     @Transactional
@@ -112,5 +122,15 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
             messages.add("Extinguisher with ID: " + extinguisherId + " not found");
         }
         return messages;
+    }
+
+    public byte[] generateQRCodeForExtinguisher(String extinguisherId) throws WriterException, IOException {
+        Extinguisher extinguisher = extinguishers.findById(extinguisherId)
+                .orElseThrow(() -> new RuntimeException("Extintor não encontrado com ID: " + extinguisherId));
+
+        String qrText = "ID: " + extinguisher.getId() + "\nTipo: " + extinguisher.getExtinguisherType() +
+                "\nValidade: " + extinguisher.getExpirationDate();
+
+        return qrCodeService.generateAndSaveQRCodeWithExtintorId(qrText, 350, 350);
     }
 }

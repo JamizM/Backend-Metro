@@ -1,5 +1,6 @@
 package com.maua.backendMetro.Service;
 
+import com.google.zxing.WriterException;
 import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
@@ -8,6 +9,7 @@ import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import com.maua.backendMetro.util.MessageWriterEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,4 +32,6 @@ public interface ExtinguisherService {
     List<Extinguisher> findExtinguisherByExtinguisherStatus(@RequestParam ExtinguisherStatus extinguisherStatus);
 
     List<String> scheduleRegularInspectionsOfExtinguishers(String extinguisherId);
+
+    byte[] generateQRCodeForExtinguisher(String extinguisherId) throws IOException, WriterException;
 }

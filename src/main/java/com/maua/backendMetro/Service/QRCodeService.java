@@ -1,11 +1,13 @@
 package com.maua.backendMetro.Service;
 
-import com.maua.backendMetro.domain.entity.QRCode;
+import com.google.zxing.WriterException;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public interface QRCodeService {
 
-    QRCode generateAndSaveQRCodeWithExtintorId(String qrText);
+    byte[] generateAndSaveQRCodeWithExtintorId(String text, int width, int height) throws IOException, WriterException;
 
 }
