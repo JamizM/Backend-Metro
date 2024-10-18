@@ -5,7 +5,6 @@ import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.HistoricManutention;
 import com.maua.backendMetro.domain.repository.HistoricManutentions;
 import com.maua.backendMetro.exception.EntityNotFoundException;
-import com.maua.backendMetro.rest.controller.dto.HistoricManutentionDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -36,8 +35,8 @@ public class HistoricManutentionController {
     }
 
     @PostMapping
-    public HistoricManutention createHistoricManutention(@RequestBody @Valid HistoricManutentionDTO dto) {
-        HistoricManutention savedHistoricManutention = historicManutentionService.createHistoricManutention(dto);
+    public HistoricManutention createHistoricManutention(@RequestBody @Valid HistoricManutention historicManutention) {
+        HistoricManutention savedHistoricManutention = historicManutentions.save(historicManutention);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -68,8 +67,10 @@ public class HistoricManutentionController {
                 .orElseThrow(() -> new EntityNotFoundException("HistoricManutention not found"));
     }
 
-    @GetMapping("/Find-Historic-Manutention-By-ExtinguisherId") //funcao dando erro de parse String para Long
-    public List<HistoricManutention> getHistoricManutentionByExtinguisherId(@RequestParam Extinguisher extinguisher) {
-        return historicManutentionService.findHistoricManutentionByExtinguisherId(extinguisher);
+    @GetMapping("/extinguisher")
+    @ResponseStatus(HttpStatus.OK)
+    public List<HistoricManutention> getExtinguisherHistoricManutention(@RequestParam Extinguisher extinguisher) {
+        return historicManutentionService.getHistoricManutentionByExtinguisherId(extinguisher.getId());
+        //codigo funciona, porem dando erro de "extinguisher" nao presente
     }
 }
