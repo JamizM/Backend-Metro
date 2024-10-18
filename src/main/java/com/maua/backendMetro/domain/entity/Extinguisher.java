@@ -59,8 +59,10 @@ public class Extinguisher {
 
     @OneToMany(mappedBy = "extinguisher", fetch = FetchType.LAZY)
     private List<HistoricManutention> historicManutention;
+
+    @OneToOne(mappedBy = "extinguisher")
+    private QRCode qrCode;
 }
 
-    //qrcode
     //observacoes
 
