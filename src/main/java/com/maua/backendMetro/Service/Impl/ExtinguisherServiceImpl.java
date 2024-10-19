@@ -4,11 +4,14 @@ import com.google.zxing.WriterException;
 import com.maua.backendMetro.Service.ExtinguisherService;
 import com.maua.backendMetro.Service.QRCodeService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
+import com.maua.backendMetro.domain.entity.HistoricManutention;
 import com.maua.backendMetro.domain.entity.Localization;
+import com.maua.backendMetro.domain.entity.QRCode;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import com.maua.backendMetro.domain.repository.Extinguishers;
+import com.maua.backendMetro.domain.repository.HistoricManutentions;
 import com.maua.backendMetro.domain.repository.Localizations;
 import com.maua.backendMetro.exception.EntityNotFoundException;
 import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
@@ -32,11 +35,13 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
 
     private final Extinguishers extinguishers;
     private final Localizations localizations;
+    private final HistoricManutentions historicManutentions;
     private final QRCodeService qrCodeService;
 
-    public ExtinguisherServiceImpl(Extinguishers extinguishers, Localizations localizations, @Qualifier("QRCodeServiceImpl") QRCodeService qrCodeService) {
+    public ExtinguisherServiceImpl(Extinguishers extinguishers, Localizations localizations, HistoricManutentions historicManutentions, @Qualifier("QRCodeServiceImpl") QRCodeService qrCodeService) {
         this.extinguishers = extinguishers;
         this.localizations = localizations;
+        this.historicManutentions = historicManutentions;
         this.qrCodeService = qrCodeService;
     }
 
@@ -125,12 +130,22 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     }
 
     public byte[] generateQRCodeForExtinguisher(String extinguisherId) throws WriterException, IOException {
+        StringBuilder qrText = new StringBuilder();
+
         Extinguisher extinguisher = extinguishers.findById(extinguisherId)
                 .orElseThrow(() -> new RuntimeException("Extintor não encontrado com ID: " + extinguisherId));
 
-        String qrText = "ID: " + extinguisher.getId() + "\nTipo: " + extinguisher.getExtinguisherType() +
-                "\nValidade: " + extinguisher.getExpirationDate();
+        qrText.append("ID: ").append(extinguisher.getId());
 
-        return qrCodeService.generateAndSaveQRCodeWithExtintorId(qrText, 350, 350);
+        List<HistoricManutention> manutentions = historicManutentions.findHistoricManutentionByExtinguisherId(extinguisherId);
+
+        for (HistoricManutention manutention : manutentions) {
+            qrText.append("\n\nData: ").append(manutention.getMaintenanceDate())
+            .append("\nDescricao: ").append(manutention.getDescription())
+            .append("\nResponsavel: ").append(manutention.getResponsible());
+        }
+
+
+        return qrCodeService.generateAndSaveQRCodeWithExtintorId(qrText.toString(), 350, 350);
     }
 }

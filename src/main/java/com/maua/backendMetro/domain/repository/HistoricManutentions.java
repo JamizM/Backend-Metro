@@ -13,4 +13,5 @@ import java.util.List;
 public interface HistoricManutentions extends JpaRepository<HistoricManutention, Long> {
 
     List<HistoricManutention> findHistoricManutentionByExtinguisherId(String extinguisher);
+
 }

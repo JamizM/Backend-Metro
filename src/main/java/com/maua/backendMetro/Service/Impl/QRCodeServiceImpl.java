@@ -18,6 +18,8 @@ import java.io.IOException;
 @Service
 public class QRCodeServiceImpl implements QRCodeService {
 
+    private final QRCodeRepository qrCodeRepository;
+
     @Override
     public byte[] generateAndSaveQRCodeWithExtintorId(String text, int width, int height) throws IOException, WriterException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -26,5 +28,10 @@ public class QRCodeServiceImpl implements QRCodeService {
         ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
         MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
         return pngOutputStream.toByteArray();
+    }
+
+    @Override
+    public QRCode save(QRCode qrCode) {
+        return qrCodeRepository.save(qrCode);
     }
 }

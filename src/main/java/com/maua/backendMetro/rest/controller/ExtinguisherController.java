@@ -3,6 +3,7 @@ package com.maua.backendMetro.rest.controller;
 import com.google.zxing.WriterException;
 import com.maua.backendMetro.Service.ExtinguisherService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
+import com.maua.backendMetro.domain.entity.QRCode;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
@@ -142,6 +143,7 @@ public class ExtinguisherController {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.IMAGE_PNG);
             return ResponseEntity.ok().headers(headers).body(qrCodeImage);
+
 
         } catch (WriterException | IOException e) {
             return ResponseEntity.status(500).body(null);
