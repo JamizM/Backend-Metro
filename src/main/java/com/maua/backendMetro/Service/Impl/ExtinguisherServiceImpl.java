@@ -102,7 +102,7 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
                 messages.add("The Extinguisher with ID " + extinguisher.getId() + " has expired.");
             }
             else if (currentDate.plusMonths(12).isBefore(expirationDate)) {
-                messages.add("The E xtinguisher with ID " + extinguisher.getId() + " is within the expiration date.");
+                messages.add("The Extinguisher with ID " + extinguisher.getId() + " is within the expiration date.");
             }
         }
         return messages;

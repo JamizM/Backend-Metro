@@ -1,7 +1,7 @@
 package com.maua.backendMetro.rest.controller;
 
 import com.maua.backendMetro.domain.entity.Users;
-import com.maua.backendMetro.domain.repository.Useers;
+import com.maua.backendMetro.domain.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 @RequestMapping("/api/Users")
 public class UserController {
 
-    private final Useers userRepository;
+    private final UserRepository userRepository;
 
-    public UserController(Useers userRepository) {
+    public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
