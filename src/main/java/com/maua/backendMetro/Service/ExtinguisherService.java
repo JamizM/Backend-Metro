@@ -27,8 +27,6 @@ public interface ExtinguisherService {
 
     List<String> verifyExpirationDateExtinguisherAndAlert() throws MessageWriterEntity;
 
-    void verifyIfNextInspectionIsLessThanExpirationDate(Extinguisher extinguisher);
-
     List<Extinguisher> findExtinguisherByExtinguisherStatus(@RequestParam ExtinguisherStatus extinguisherStatus);
 
     List<String> scheduleRegularInspectionsOfExtinguishers(String extinguisherId);

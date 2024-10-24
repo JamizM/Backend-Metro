@@ -70,17 +70,6 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     }
 
     @Override
-    public void verifyIfNextInspectionIsLessThanExpirationDate(@NotNull Extinguisher extinguisher) {
-        LocalDate expirationDateExtinguisher = extinguisher.getExpirationDate();
-        LocalDate nextInspectionExtinguisher = extinguisher.getNextInspection();
-
-        //fazer funcao que retorna o id do extintor, porem este codigo funciona mesmo assim, dando erro 500
-        if (nextInspectionExtinguisher.isAfter(expirationDateExtinguisher)){ //se a data de inspecao for depois da data de expiracao, será lançada exceção
-            throw new IllegalArgumentException("The next inspection date cannot be after the expiration date, verify the exintiguisher with ID: " + extinguisher.getId());
-        }
-    }
-
-    @Override
     @Transactional
     public List<String> verifyExpirationDateExtinguisherAndAlert() {
         List<Extinguisher> extinguisherList = extinguishers.findAll();
@@ -93,8 +82,6 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
         List<String> messages = new ArrayList<>();
 
         for (Extinguisher extinguisher : extinguisherList) {
-
-            verifyIfNextInspectionIsLessThanExpirationDate(extinguisher);
 
             LocalDate expirationDate = extinguisher.getExpirationDate();
 
