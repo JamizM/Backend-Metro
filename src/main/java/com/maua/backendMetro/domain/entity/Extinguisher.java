@@ -3,7 +3,9 @@ package com.maua.backendMetro.domain.entity;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
@@ -35,10 +37,12 @@ public class Extinguisher {
 
     @Column(name = "expiration_date", nullable = false)
     @NotNull(message = "{field.expiration-date.required}")
+    @Future(message = "Expiration Date must be in the future")
     private LocalDate expirationDate;
 
     @Column(name = "last_recharge_date", nullable = false)
     @NotNull(message = "{field.last-recharge-date.required}")
+    @PastOrPresent(message = "Last Recharge Date must be in the past or present")
     private LocalDate lastRechargeDate;
 
     @Column(name = "team_code", nullable = false)
@@ -47,6 +51,7 @@ public class Extinguisher {
 
     @Column(name = "next_inspection", nullable = false)
     @NotNull(message = "{field.next-inspection.required}")
+    @Future(message = "Next Inspection must be in the future")
     private LocalDate nextInspection;
 
     @Column(name = "extinguisher_status", nullable = false)
