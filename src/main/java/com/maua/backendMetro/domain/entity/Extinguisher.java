@@ -2,6 +2,7 @@ package com.maua.backendMetro.domain.entity;
 
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
+import com.maua.backendMetro.util.ValidExtinguisherDates;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Validated
 @Entity
+@ValidExtinguisherDates
 public class Extinguisher {
     @Id
     @Column(name = "id", nullable = false)

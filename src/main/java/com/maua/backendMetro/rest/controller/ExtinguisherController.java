@@ -69,7 +69,7 @@ public class ExtinguisherController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateExtinguisher(@PathVariable String id, @RequestBody Extinguisher extinguisher){
+    public void updateExtinguisher(@PathVariable String id, @RequestBody @Valid Extinguisher extinguisher){
         extinguishers.findById(id)
                 .map(extinguisher1 -> {
                     extinguisher.setId(extinguisher1.getId());
@@ -102,6 +102,7 @@ public class ExtinguisherController {
 
     @GetMapping("/Search-Extinguisher-By-Expiration-Date")
     @ResponseStatus(HttpStatus.OK)
+    @Valid
     public List<String> alertExpirationDateOfExtinguisher() throws MessageWriterEntity {
         return extinguisherService.verifyExpirationDateExtinguisherAndAlert();
     }
