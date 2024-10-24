@@ -3,7 +3,6 @@ package com.maua.backendMetro.domain.entity;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
@@ -32,7 +31,7 @@ public class Extinguisher {
 
     @Column(name = "manufacturer_code", nullable = false)
     @NotNull(message = "{field.manufacturer-code.required}")
-    private LocalDate manufacturerCode;
+    private String manufacturerCode;
 
     @Column(name = "expiration_date", nullable = false)
     @NotNull(message = "{field.expiration-date.required}")
@@ -60,8 +59,10 @@ public class Extinguisher {
 
     @OneToMany(mappedBy = "extinguisher", fetch = FetchType.LAZY)
     private List<HistoricManutention> historicManutention;
+
+    @OneToOne(mappedBy = "extinguisher")
+    private QRCode qrCode;
 }
 
-    //qrcode
     //observacoes
 

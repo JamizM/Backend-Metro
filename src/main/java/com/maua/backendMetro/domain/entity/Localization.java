@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,7 +15,7 @@ import java.util.List;
 @Entity
 public class Localization {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name="area")
@@ -27,7 +25,6 @@ public class Localization {
 
     @Column(name="subway_station")
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "{field.subway-station.required}")
     private SubwayStation subwayStation;
 
     @Column(name="detailed_location")

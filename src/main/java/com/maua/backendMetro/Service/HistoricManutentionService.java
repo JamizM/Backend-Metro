@@ -1,10 +1,11 @@
 package com.maua.backendMetro.Service;
 
 import com.maua.backendMetro.domain.entity.HistoricManutention;
-import com.maua.backendMetro.rest.controller.dto.HistoricManutentionDTO;
+
+import java.util.List;
 
 public interface HistoricManutentionService {
 
-    public HistoricManutention createHistoricManutention(HistoricManutentionDTO dto);
+    List<HistoricManutention> getHistoricManutentionByExtinguisherId(String extinguisherId);
 
 }

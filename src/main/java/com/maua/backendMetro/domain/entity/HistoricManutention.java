@@ -2,6 +2,7 @@ package com.maua.backendMetro.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Validated
 @Entity
 public class HistoricManutention {
     @Id
@@ -20,7 +22,7 @@ public class HistoricManutention {
     private Extinguisher extinguisher;
 
     @Column(name="maintenance_date", nullable = false)
-    private LocalDate maintenanceData;
+    private LocalDate maintenanceDate;
 
     @Column(name="description")
     private String description;

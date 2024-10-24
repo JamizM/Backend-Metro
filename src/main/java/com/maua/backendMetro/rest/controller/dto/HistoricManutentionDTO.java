@@ -1,6 +1,5 @@
 package com.maua.backendMetro.rest.controller.dto;
 
-import com.maua.backendMetro.domain.entity.Extinguisher;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;

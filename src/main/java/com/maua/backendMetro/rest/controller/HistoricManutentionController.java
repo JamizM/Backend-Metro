@@ -1,11 +1,10 @@
 package com.maua.backendMetro.rest.controller;
 
-import com.maua.backendMetro.Service.Impl.HistoricManutentionImpl;
+import com.maua.backendMetro.Service.HistoricManutentionService;
+import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.HistoricManutention;
-import com.maua.backendMetro.domain.repository.Extinguishers;
 import com.maua.backendMetro.domain.repository.HistoricManutentions;
 import com.maua.backendMetro.exception.EntityNotFoundException;
-import com.maua.backendMetro.rest.controller.dto.HistoricManutentionDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +20,7 @@ import java.util.List;
 public class HistoricManutentionController {
 
     private HistoricManutentions historicManutentions;
-    private HistoricManutentionImpl historicManutentionImpl;
+    private HistoricManutentionService historicManutentionService;
 
     @GetMapping
     public List<HistoricManutention> listAll() {
@@ -36,8 +35,8 @@ public class HistoricManutentionController {
     }
 
     @PostMapping
-    public HistoricManutention createHistoricManutention(@RequestBody @Valid HistoricManutentionDTO dto) {
-        HistoricManutention savedHistoricManutention = historicManutentionImpl.createHistoricManutention(dto);
+    public HistoricManutention createHistoricManutention(@RequestBody @Valid HistoricManutention historicManutention) {
+        HistoricManutention savedHistoricManutention = historicManutentions.save(historicManutention);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -68,8 +67,10 @@ public class HistoricManutentionController {
                 .orElseThrow(() -> new EntityNotFoundException("HistoricManutention not found"));
     }
 
-    @GetMapping("/extinguisher/{extinguisherId}")
-    public List<HistoricManutention> getHistoricManutentionByExtinguisherId(@PathVariable String extinguisherId) {
-        return historicManutentions.findHistoricManutentionByExtinguisherId(extinguisherId);
+    @GetMapping("/extinguisher")
+    @ResponseStatus(HttpStatus.OK)
+    public List<HistoricManutention> getExtinguisherHistoricManutention(@RequestParam Extinguisher extinguisher) {
+        return historicManutentionService.getHistoricManutentionByExtinguisherId(extinguisher.getId());
+        //codigo funciona, porem dando erro de "extinguisher" nao presente
     }
 }
