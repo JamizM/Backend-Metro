@@ -5,6 +5,7 @@ import com.maua.backendMetro.Service.ExtinguisherService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.QRCode;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
+import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import com.maua.backendMetro.domain.repository.Extinguishers;
@@ -95,6 +96,20 @@ public class ExtinguisherController {
 
         if (extinguisher.isEmpty()) { //se algo dentro da variavel extinguisher for vazio
             throw new EntityNotFoundException("Extinguisher not found for the given localization details, Verify the Subway Station");
+        }
+
+        return extinguisher;
+    }
+
+    @GetMapping("/Search-Extinguisher-By-Type")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Extinguisher> getExtinguisherByType(@RequestParam(required = false) @NotNull(message = "{field.extinguisher-type.required}")
+                                                    ExtinguisherType extinguisherType) {
+
+        List<Extinguisher> extinguisher = extinguishers.findExtinguisherByExtinguisherType(extinguisherType);
+
+        if (extinguisher.isEmpty()) {
+            throw new EntityNotFoundException("Extinguisher not found for the given type");
         }
 
         return extinguisher;
