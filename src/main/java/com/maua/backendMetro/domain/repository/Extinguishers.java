@@ -19,8 +19,6 @@ import java.util.Optional;
 @Repository
 public interface Extinguishers extends JpaRepository<Extinguisher, String> {
 
-    Optional<Extinguisher> findExtinguisherByLocalization(Localization localization);
-
     Optional<Extinguisher> findExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation
             (
             MetroLine area,
