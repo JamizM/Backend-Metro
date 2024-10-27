@@ -3,7 +3,6 @@ package com.maua.backendMetro.rest.controller;
 import com.google.zxing.WriterException;
 import com.maua.backendMetro.Service.ExtinguisherService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
-import com.maua.backendMetro.domain.entity.QRCode;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
@@ -94,7 +93,7 @@ public class ExtinguisherController {
 
         Optional<Extinguisher> extinguisher = extinguisherService.findExtinguisherByLocalizationDetails(area, subwayStation, detailedLocation);
 
-        if (extinguisher.isEmpty()) { //se algo dentro da variavel extinguisher for vazio
+        if (extinguisher.isEmpty()) { //se algo dentro dos parametros passados na funcao acima, retorna erro
             throw new EntityNotFoundException("Extinguisher not found for the given localization details, Verify the Subway Station");
         }
 
@@ -165,6 +164,8 @@ public class ExtinguisherController {
             return ResponseEntity.status(500).body(null);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(null);
+        } catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
 }
