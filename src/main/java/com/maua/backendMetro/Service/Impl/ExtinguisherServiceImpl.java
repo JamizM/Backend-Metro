@@ -15,6 +15,8 @@ import com.maua.backendMetro.domain.repository.HistoricManutentions;
 import com.maua.backendMetro.domain.repository.Localizations;
 import com.maua.backendMetro.exception.EntityNotFoundException;
 import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +39,9 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     private final Localizations localizations;
     private final HistoricManutentions historicManutentions;
     private final QRCodeService qrCodeService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public ExtinguisherServiceImpl(Extinguishers extinguishers, Localizations localizations, HistoricManutentions historicManutentions, @Qualifier("QRCodeServiceImpl") QRCodeService qrCodeService) {
         this.extinguishers = extinguishers;
