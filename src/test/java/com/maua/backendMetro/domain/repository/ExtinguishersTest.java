@@ -71,7 +71,7 @@ class ExtinguishersTest {
     }
 
     @Test
-    @DisplayName("Should not return a extinguisher by localization area, subway station and detailed location")
+    @DisplayName("Should not return a extinguisher by localization area, subway station and detailed location when extinguisher is not set")
     void testFindExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation_Failed() {
         Localization localization = new Localization("RED_LINE", "JABAQUARA", "Plataforma 1");
 
@@ -163,7 +163,7 @@ class ExtinguishersTest {
     }
 
     @Test
-    @DisplayName("Should return extinguisher by extinguisher type")
+    @DisplayName("Should not return extinguisher by extinguisher type")
     void testFindExtinguisherByExtinguisherType_Failed() {
         Extinguisher extinguisher = new Extinguisher("0EX143-4442",
                 "FOAM",
