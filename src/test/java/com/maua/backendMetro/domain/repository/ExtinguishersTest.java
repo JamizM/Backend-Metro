@@ -7,6 +7,7 @@ import java.lang.IllegalArgumentException;
 
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import jakarta.persistence.EntityManager;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,13 @@ class ExtinguishersTest {
     Extinguishers extinguishers;
 
     //testes do repository
-    private Extinguisher createExtinguisher(Extinguisher extinguisher) {
+    private @NotNull Extinguisher createExtinguisher(Extinguisher extinguisher) {
         Extinguisher newExtinguisher = new Extinguisher(extinguisher);
         this.entityManager.persist(newExtinguisher);
         return newExtinguisher;
     }
 
-    private Localization createLocalization(Localization localization){
+    private @NotNull Localization createLocalization(Localization localization){
         Localization newLocalization = new Localization(localization);
         this.entityManager.persist(newLocalization);
         return newLocalization;
@@ -43,7 +44,7 @@ class ExtinguishersTest {
 
     @Test
     @DisplayName("Should return a extinguisher by localization area, subway station and detailed location")
-    void findExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation_Success() {
+    void testFindExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation_Success() {
         Localization localization = new Localization("RED_LINE", "JABAQUARA", "Plataforma 1");
 
         entityManager.persist(localization);
@@ -71,7 +72,7 @@ class ExtinguishersTest {
 
     @Test
     @DisplayName("Should not return a extinguisher by localization area, subway station and detailed location")
-    void findExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation_Failed() {
+    void testFindExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation_Failed() {
         Localization localization = new Localization("RED_LINE", "JABAQUARA", "Plataforma 1");
 
         entityManager.persist(localization);
@@ -100,7 +101,7 @@ class ExtinguishersTest {
 
     @Test
     @DisplayName("Should return status of extinguisher")
-    void findExtinguisherByExtinguisherStatus_Sucess() {
+    void testFindExtinguisherByExtinguisherStatus_Sucess() {
         Extinguisher extinguisher = new Extinguisher("0EX143-4442",
                 "FOAM",
                 10,
@@ -121,7 +122,7 @@ class ExtinguishersTest {
 
     @Test
     @DisplayName("Should throw IllegalArgumentException for invalid extinguisher status")
-    void findExtinguisherByExtinguisherStatus_Failed() {
+    void testFindExtinguisherByExtinguisherStatus_Failed() {
         Extinguisher extinguisher = new Extinguisher("0EX143-4442",
                 "FOAM",
                 10,
@@ -142,7 +143,7 @@ class ExtinguishersTest {
 
     @Test
     @DisplayName("Should return extinguisher by extinguisher type")
-    void findExtinguisherByExtinguisherType_Sucess() {
+    void testFindExtinguisherByExtinguisherType_Sucess() {
         Extinguisher extinguisher = new Extinguisher("0EX143-4442",
                 "FOAM",
                 10,
@@ -163,7 +164,7 @@ class ExtinguishersTest {
 
     @Test
     @DisplayName("Should return extinguisher by extinguisher type")
-    void findExtinguisherByExtinguisherType_Failed() {
+    void testFindExtinguisherByExtinguisherType_Failed() {
         Extinguisher extinguisher = new Extinguisher("0EX143-4442",
                 "FOAM",
                 10,
