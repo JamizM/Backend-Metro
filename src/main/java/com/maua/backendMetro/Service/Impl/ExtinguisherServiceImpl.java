@@ -6,7 +6,6 @@ import com.maua.backendMetro.Service.QRCodeService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.HistoricManutention;
 import com.maua.backendMetro.domain.entity.Localization;
-import com.maua.backendMetro.domain.entity.QRCode;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
@@ -18,8 +17,8 @@ import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,17 +42,12 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
     public ExtinguisherServiceImpl(Extinguishers extinguishers, Localizations localizations, HistoricManutentions historicManutentions, @Qualifier("QRCodeServiceImpl") QRCodeService qrCodeService) {
         this.extinguishers = extinguishers;
         this.localizations = localizations;
         this.historicManutentions = historicManutentions;
         this.qrCodeService = qrCodeService;
-    }
-
-    @Override
-    @Transactional
-    public List<Extinguisher> nextInspectionOfExtinguisherAlert(String id) {
-        return null;
     }
 
     @Override
