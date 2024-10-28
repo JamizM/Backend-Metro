@@ -3,8 +3,9 @@ package com.maua.backendMetro.domain.repository;
 import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.Localization;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
+import java.lang.IllegalArgumentException;
+
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
-import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,9 +27,6 @@ class ExtinguishersTest {
 
     @Autowired
     Extinguishers extinguishers;
-
-    @Autowired
-    Localizations localizations;
 
     //testes do repository
     private Extinguisher createExtinguisher(Extinguisher extinguisher) {
@@ -71,12 +69,116 @@ class ExtinguishersTest {
         assertThat(foundedExtinguisherByLocalization.isPresent()).isTrue();
     }
 
+    @Test
+    @DisplayName("Should not return a extinguisher by localization area, subway station and detailed location")
+    void findExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation_Failed() {
+        Localization localization = new Localization("RED_LINE", "JABAQUARA", "Plataforma 1");
+
+        entityManager.persist(localization);
+
+        Extinguisher extinguisher = new Extinguisher("0EX143-4442",
+                "FOAM",
+                10,
+                "GIEFL",
+                "2025-12-01",
+                "2023-01-01",
+                123,
+                "2025-01-01",
+                "OK");
+        //não setamos localização para o extintor
+
+        createExtinguisher(extinguisher);
+
+        Optional<Extinguisher> foundedExtinguisherByLocalization = extinguishers.findExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation(
+                localization.getArea(),
+                localization.getSubwayStation(),
+                localization.getDetailedLocation());
+
+        assertThat(foundedExtinguisherByLocalization.isEmpty()).isTrue();
+    }
+
 
     @Test
-    void findExtinguisherByExtinguisherStatus() {
+    @DisplayName("Should return status of extinguisher")
+    void findExtinguisherByExtinguisherStatus_Sucess() {
+        Extinguisher extinguisher = new Extinguisher("0EX143-4442",
+                "FOAM",
+                10,
+                "GIEFL",
+                "2025-12-01",
+                "2023-01-01",
+                123,
+                "2025-01-01",
+                "OK");
+
+        createExtinguisher(extinguisher);
+
+        Optional<Extinguisher> foundedExtinguisherByStatus = extinguishers.
+                findExtinguisherByExtinguisherStatus(extinguisher.getExtinguisherStatus()).stream().findFirst();
+
+        assertThat(foundedExtinguisherByStatus.isPresent()).isTrue();
     }
 
     @Test
-    void findExtinguisherByExtinguisherType() {
+    @DisplayName("Should throw IllegalArgumentException for invalid extinguisher status")
+    void findExtinguisherByExtinguisherStatus_Failed() {
+        Extinguisher extinguisher = new Extinguisher("0EX143-4442",
+                "FOAM",
+                10,
+                "GIEFL",
+                "2025-12-01",
+                "2023-01-01",
+                123,
+                "2025-01-01",
+                "OK");
+
+        createExtinguisher(extinguisher);
+
+        assertThat(extinguishers.findExtinguisherByExtinguisherStatus(extinguisher.getExtinguisherStatus()).isEmpty()).isFalse();
+        assertThrows(IllegalArgumentException.class, () -> {
+            ExtinguisherStatus.valueOf("INVALID_STATUS");
+        });
+    }
+
+    @Test
+    @DisplayName("Should return extinguisher by extinguisher type")
+    void findExtinguisherByExtinguisherType_Sucess() {
+        Extinguisher extinguisher = new Extinguisher("0EX143-4442",
+                "FOAM",
+                10,
+                "GIEFL",
+                "2025-12-01",
+                "2023-01-01",
+                123,
+                "2025-01-01",
+                "OK");
+
+        createExtinguisher(extinguisher);
+
+        Optional<Extinguisher> foundedExtinguisherByType = extinguishers.
+                findExtinguisherByExtinguisherType(extinguisher.getExtinguisherType()).stream().findFirst();
+
+        assertThat(foundedExtinguisherByType.isPresent()).isTrue();
+    }
+
+    @Test
+    @DisplayName("Should return extinguisher by extinguisher type")
+    void findExtinguisherByExtinguisherType_Failed() {
+        Extinguisher extinguisher = new Extinguisher("0EX143-4442",
+                "FOAM",
+                10,
+                "GIEFL",
+                "2025-12-01",
+                "2023-01-01",
+                123,
+                "2025-01-01",
+                "OK");
+
+        createExtinguisher(extinguisher);
+
+        assertThat(extinguishers.findExtinguisherByExtinguisherType(extinguisher.getExtinguisherType()).isEmpty()).isFalse();
+        assertThrows(IllegalArgumentException.class, () -> {
+            ExtinguisherType.valueOf("INVALID_STATUS");
+        });
     }
 }
