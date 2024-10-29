@@ -7,6 +7,7 @@ import com.maua.backendMetro.domain.repository.Extinguishers;
 import com.maua.backendMetro.domain.repository.HistoricManutentions;
 import com.maua.backendMetro.domain.repository.Localizations;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -52,7 +53,8 @@ class ExtinguisherServiceImplTest {
 
 
     @Test
-    void verifyExpirationDateExtinguisherAndAlert() {
+    @DisplayName("Should return a message when extinguisher is within the expiration date or has expired")
+    void testVerifyExpirationDateExtinguisherAndAlert_Success() {
         Extinguisher expiredExtinguisher = new Extinguisher();
 
         expiredExtinguisher.setId("1");
@@ -72,7 +74,19 @@ class ExtinguisherServiceImplTest {
     }
 
     @Test
-    void scheduleRegularInspectionsOfExtinguishers() {
+    @DisplayName("Should return a message when no extinguishers are found")
+    void testVerifyExpirationDateExtinguisherAndAlert_Fail() {
+        when(extinguishers.findAll()).thenReturn(List.of());
+
+        List<String> messages = extinguisherService.verifyExpirationDateExtinguisherAndAlert();
+
+        assertEquals(1, messages.size());
+        assertEquals("No extinguishers found.", messages.getFirst());
+    }
+
+    @Test
+    @DisplayName("Should return a message when extinguisher is scheduled for inspection")
+    void testScheduleRegularInspectionsOfExtinguishers_Success() {
         Extinguisher extinguisher = new Extinguisher();
 
         extinguisher.setId("1");
@@ -89,7 +103,24 @@ class ExtinguisherServiceImplTest {
     }
 
     @Test
-    void generateQRCodeForExtinguisher() throws Exception {
+    @DisplayName("Should return a message when extinguisher is not due for inspection")
+    void testScheduleRegularInspectionsOfExtinguishers_Fail() {
+        Extinguisher extinguisher = new Extinguisher();
+
+        extinguisher.setId("1");
+        extinguisher.setNextInspection(LocalDate.now().plusMonths(13));
+
+        when(extinguishers.findById("1")).thenReturn(Optional.of(extinguisher));
+
+        List<String> messages = extinguisherService.scheduleRegularInspectionsOfExtinguishers("1");
+
+        assertEquals(1, messages.size());
+        assertEquals("The extinguisher ID: " + extinguisher.getId() + " is not due for inspection.", messages.getFirst());
+    }
+
+    @Test
+    @DisplayName("Should return a qrcode for the extinguisher to see historic manutentions")
+    void testGenerateQRCodeForExtinguisher_Success() throws Exception {
         String extinguisherId = "1";
         Extinguisher extinguisher = new Extinguisher();
         extinguisher.setId(extinguisherId);
@@ -109,5 +140,20 @@ class ExtinguisherServiceImplTest {
         verify(extinguishers).findById(extinguisherId);
         verify(historicManutentions).findHistoricManutentionByExtinguisherId(extinguisherId);
         verify(qrCodeService).generateAndSaveQRCodeWithExtintorId(anyString(), eq(350), eq(350));
+    }
+
+    @Test
+    @DisplayName("Should not return a qrcode for the extinguisher when the extinguisher does not exist")
+    void testGenerateQRCodeForExtinguisher_Fail() throws Exception {
+        String extinguisherId = "1";
+
+        when(extinguishers.findById(extinguisherId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            extinguisherService.generateQRCodeForExtinguisher(extinguisherId);
+        });
+
+        assertEquals("Extintor não encontrado com ID: " + extinguisherId, exception.getMessage());
+        verify(extinguishers).findById(extinguisherId);
     }
 }
