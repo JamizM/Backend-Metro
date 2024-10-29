@@ -106,9 +106,16 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
 
         if (optionalExtinguisher.isPresent()) {
             Extinguisher extinguisher = optionalExtinguisher.get();
-            extinguisher.setNextInspection(extinguisher.getNextInspection().plusMonths(12));
-            extinguishers.save(extinguisher);
-            messages.add("Scheduled next inspection for extinguisher ID: "+ extinguisher.getId() + " on " + extinguisher.getNextInspection());
+            LocalDate nextInspectionDate = extinguisher.getNextInspection();
+            LocalDate currentDate = LocalDate.now();
+
+            if (nextInspectionDate.isAfter(currentDate.plusMonths(12))) {
+                messages.add("The extinguisher ID: " + extinguisher.getId() + " is not due for inspection.");
+            } else {
+                extinguisher.setNextInspection(nextInspectionDate.plusMonths(12));
+                extinguishers.save(extinguisher);
+                messages.add("Scheduled next inspection for extinguisher ID: " + extinguisher.getId() + " on " + extinguisher.getNextInspection());
+            }
         } else {
             messages.add("Extinguisher with ID: " + extinguisherId + " not found");
         }
