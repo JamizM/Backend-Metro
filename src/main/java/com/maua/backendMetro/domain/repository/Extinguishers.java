@@ -4,6 +4,7 @@ import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.HistoricManutention;
 import com.maua.backendMetro.domain.entity.Localization;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
+import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,8 +19,6 @@ import java.util.Optional;
 @Repository
 public interface Extinguishers extends JpaRepository<Extinguisher, String> {
 
-    Optional<Extinguisher> findExtinguisherByLocalization(Localization localization);
-
     Optional<Extinguisher> findExtinguisherByLocalization_AreaAndLocalization_SubwayStationAndLocalization_DetailedLocation
             (
             MetroLine area,
@@ -28,4 +27,6 @@ public interface Extinguishers extends JpaRepository<Extinguisher, String> {
             );
 
     List<Extinguisher> findExtinguisherByExtinguisherStatus(ExtinguisherStatus extinguisherStatus);
+
+    List<Extinguisher> findExtinguisherByExtinguisherType(ExtinguisherType extinguisherType);
 }

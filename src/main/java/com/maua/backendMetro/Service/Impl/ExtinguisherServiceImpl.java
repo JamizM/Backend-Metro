@@ -6,7 +6,6 @@ import com.maua.backendMetro.Service.QRCodeService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.HistoricManutention;
 import com.maua.backendMetro.domain.entity.Localization;
-import com.maua.backendMetro.domain.entity.QRCode;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
@@ -15,9 +14,11 @@ import com.maua.backendMetro.domain.repository.HistoricManutentions;
 import com.maua.backendMetro.domain.repository.Localizations;
 import com.maua.backendMetro.exception.EntityNotFoundException;
 import com.maua.backendMetro.rest.controller.dto.ExtinguisherDTO;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,17 +39,15 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     private final HistoricManutentions historicManutentions;
     private final QRCodeService qrCodeService;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
     public ExtinguisherServiceImpl(Extinguishers extinguishers, Localizations localizations, HistoricManutentions historicManutentions, @Qualifier("QRCodeServiceImpl") QRCodeService qrCodeService) {
         this.extinguishers = extinguishers;
         this.localizations = localizations;
         this.historicManutentions = historicManutentions;
         this.qrCodeService = qrCodeService;
-    }
-
-    @Override
-    @Transactional
-    public List<Extinguisher> nextInspectionOfExtinguisherAlert(String id) {
-        return null;
     }
 
     @Override
@@ -70,17 +69,6 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     }
 
     @Override
-    public void verifyIfNextInspectionIsLessThanExpirationDate(@NotNull Extinguisher extinguisher) {
-        LocalDate expirationDateExtinguisher = extinguisher.getExpirationDate();
-        LocalDate nextInspectionExtinguisher = extinguisher.getNextInspection();
-
-        //fazer funcao que retorna o id do extintor, porem este codigo funciona mesmo assim, dando erro 500
-        if (nextInspectionExtinguisher.isAfter(expirationDateExtinguisher)){ //se a data de inspecao for depois da data de expiracao, será lançada exceção
-            throw new IllegalArgumentException("The next inspection date cannot be after the expiration date, verify the exintiguisher with ID: " + extinguisher.getId());
-        }
-    }
-
-    @Override
     @Transactional
     public List<String> verifyExpirationDateExtinguisherAndAlert() {
         List<Extinguisher> extinguisherList = extinguishers.findAll();
@@ -93,8 +81,6 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
         List<String> messages = new ArrayList<>();
 
         for (Extinguisher extinguisher : extinguisherList) {
-
-            verifyIfNextInspectionIsLessThanExpirationDate(extinguisher);
 
             LocalDate expirationDate = extinguisher.getExpirationDate();
 
@@ -120,9 +106,16 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
 
         if (optionalExtinguisher.isPresent()) {
             Extinguisher extinguisher = optionalExtinguisher.get();
-            extinguisher.setNextInspection(extinguisher.getNextInspection().plusMonths(12));
-            extinguishers.save(extinguisher);
-            messages.add("Scheduled next inspection for extinguisher ID: "+ extinguisher.getId() + " on " + extinguisher.getNextInspection());
+            LocalDate nextInspectionDate = extinguisher.getNextInspection();
+            LocalDate currentDate = LocalDate.now();
+
+            if (nextInspectionDate.isAfter(currentDate.plusMonths(12))) {
+                messages.add("The extinguisher ID: " + extinguisher.getId() + " is not due for inspection.");
+            } else {
+                extinguisher.setNextInspection(nextInspectionDate.plusMonths(12));
+                extinguishers.save(extinguisher);
+                messages.add("Scheduled next inspection for extinguisher ID: " + extinguisher.getId() + " on " + extinguisher.getNextInspection());
+            }
         } else {
             messages.add("Extinguisher with ID: " + extinguisherId + " not found");
         }

@@ -15,8 +15,6 @@ import java.util.Optional;
 
 public interface ExtinguisherService {
 
-    List<Extinguisher> nextInspectionOfExtinguisherAlert(String id);
-
     Extinguisher createExtinguisher(ExtinguisherDTO extinguisherDTO);
 
     Optional<Extinguisher> findExtinguisherByLocalizationDetails(
@@ -26,8 +24,6 @@ public interface ExtinguisherService {
     );
 
     List<String> verifyExpirationDateExtinguisherAndAlert() throws MessageWriterEntity;
-
-    void verifyIfNextInspectionIsLessThanExpirationDate(Extinguisher extinguisher);
 
     List<Extinguisher> findExtinguisherByExtinguisherStatus(@RequestParam ExtinguisherStatus extinguisherStatus);
 

@@ -31,4 +31,17 @@ public class Localization {
     @NotNull(message = "{field.detailed-location.required}")
     private String detailedLocation;
     //observacoes
+
+    public Localization(Localization localization) {
+        this.id = localization.getId();
+        this.area = localization.getArea();
+        this.subwayStation = localization.getSubwayStation();
+        this.detailedLocation = localization.getDetailedLocation();
+    }
+
+    public Localization(String area, String subwayStation, String detailedLocation) {
+        this.area = MetroLine.valueOf(area);
+        this.subwayStation = SubwayStation.valueOf(subwayStation);
+        this.detailedLocation = detailedLocation;
+    }
 }

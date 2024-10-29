@@ -3,8 +3,8 @@ package com.maua.backendMetro.rest.controller;
 import com.google.zxing.WriterException;
 import com.maua.backendMetro.Service.ExtinguisherService;
 import com.maua.backendMetro.domain.entity.Extinguisher;
-import com.maua.backendMetro.domain.entity.QRCode;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
+import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
 import com.maua.backendMetro.domain.repository.Extinguishers;
@@ -69,7 +69,7 @@ public class ExtinguisherController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateExtinguisher(@PathVariable String id, @RequestBody Extinguisher extinguisher){
+    public void updateExtinguisher(@PathVariable String id, @RequestBody @Valid Extinguisher extinguisher){
         extinguishers.findById(id)
                 .map(extinguisher1 -> {
                     extinguisher.setId(extinguisher1.getId());
@@ -93,8 +93,22 @@ public class ExtinguisherController {
 
         Optional<Extinguisher> extinguisher = extinguisherService.findExtinguisherByLocalizationDetails(area, subwayStation, detailedLocation);
 
-        if (extinguisher.isEmpty()) { //se algo dentro da variavel extinguisher for vazio
+        if (extinguisher.isEmpty()) { //se algo dentro dos parametros passados na funcao acima, retorna erro
             throw new EntityNotFoundException("Extinguisher not found for the given localization details, Verify the Subway Station");
+        }
+
+        return extinguisher;
+    }
+
+    @GetMapping("/Search-Extinguisher-By-Type")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Extinguisher> getExtinguisherByType(@RequestParam(required = false) @NotNull(message = "{field.extinguisher-type.required}")
+                                                    ExtinguisherType extinguisherType) {
+
+        List<Extinguisher> extinguisher = extinguishers.findExtinguisherByExtinguisherType(extinguisherType);
+
+        if (extinguisher.isEmpty()) {
+            throw new EntityNotFoundException("Extinguisher not found for the given type");
         }
 
         return extinguisher;
@@ -102,6 +116,7 @@ public class ExtinguisherController {
 
     @GetMapping("/Search-Extinguisher-By-Expiration-Date")
     @ResponseStatus(HttpStatus.OK)
+    @Valid
     public List<String> alertExpirationDateOfExtinguisher() throws MessageWriterEntity {
         return extinguisherService.verifyExpirationDateExtinguisherAndAlert();
     }
@@ -149,6 +164,8 @@ public class ExtinguisherController {
             return ResponseEntity.status(500).body(null);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(null);
+        } catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
 }
