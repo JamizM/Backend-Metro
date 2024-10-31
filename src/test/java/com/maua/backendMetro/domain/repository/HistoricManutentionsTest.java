@@ -1,6 +1,5 @@
 package com.maua.backendMetro.domain.repository;
 
-
 import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.HistoricManutention;
 import jakarta.persistence.EntityManager;
@@ -25,13 +24,11 @@ public class HistoricManutentionsTest {
     @Autowired
     HistoricManutentions historicManutentions;
 
-    private Extinguisher extinguisher;
-
     private HistoricManutention historicManutention;
 
     @BeforeEach
     void setUp() {
-        extinguisher = new Extinguisher("0EX143-4442",
+        Extinguisher extinguisher = new Extinguisher("0EX143-4442",
                 "FOAM",
                 10,
                 "GIEFL",
@@ -57,7 +54,7 @@ public class HistoricManutentionsTest {
 
     @Test
     @DisplayName("Should return historic manutention by extinguisher id")
-    void testFindByExtinguisherId_Sucess() {
+    void testFindHistoricManutentionByExtinguisherId_Sucess() {
         HistoricManutention historicManutention = createHistoricManutention(this.historicManutention);
 
         HistoricManutention historicManutentionByExtinguisherId = historicManutentions.

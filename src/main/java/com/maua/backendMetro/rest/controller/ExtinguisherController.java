@@ -151,7 +151,7 @@ public class ExtinguisherController {
 
     @GetMapping("/{extinguisherId}/qrcode")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<byte[]> getQRCode(@PathVariable Extinguisher extinguisherId) {
+    public ResponseEntity<byte[]> getQRCode(@PathVariable("extinguisherId") Extinguisher extinguisherId) {
         try {
             byte[] qrCodeImage = extinguisherService.generateQRCodeForExtinguisher(extinguisherId.getId());
 
