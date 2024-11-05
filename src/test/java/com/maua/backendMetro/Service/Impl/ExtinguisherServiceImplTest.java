@@ -69,8 +69,8 @@ class ExtinguisherServiceImplTest {
         List<String> messages = extinguisherService.verifyExpirationDateExtinguisherAndAlert();
 
         assertEquals(2, messages.size());
-        assertEquals("The Extinguisher with ID 1 has expired.", messages.get(0));
-        assertEquals("The Extinguisher with ID 2 is within the expiration date.", messages.get(1));
+        assertEquals("O extintor com identificador: 1 está expirado.", messages.get(0));
+        assertEquals("O extintor com identificador: 2 está dentro do prazo de validade.", messages.get(1));
     }
 
     @Test
@@ -81,7 +81,7 @@ class ExtinguisherServiceImplTest {
         List<String> messages = extinguisherService.verifyExpirationDateExtinguisherAndAlert();
 
         assertEquals(1, messages.size());
-        assertEquals("No extinguishers found.", messages.getFirst());
+        assertEquals("Nenhum extintor encontrado.", messages.getFirst());
     }
 
     @Test
@@ -94,12 +94,13 @@ class ExtinguisherServiceImplTest {
 
         when(extinguishers.findById("1")).thenReturn(Optional.of(extinguisher));
 
-        List<String> messages = extinguisherService.scheduleRegularInspectionsOfExtinguishers("1");
+        int months = 12;
+        List<String> messages = extinguisherService.scheduleRegularInspectionsOfExtinguishers("1", months);
 
         assertEquals(1, messages.size());
-        assertEquals("Scheduled next inspection for extinguisher ID: " + extinguisher.getId() + " on "
-                + LocalDate.now().plusMonths(12), messages.getFirst());
-        assertEquals(LocalDate.now().plusMonths(12), extinguisher.getNextInspection());
+        assertEquals("Próxima inspeção agendada para o extintor com identificador: " + extinguisher.getId() + " está marcada para dia "
+                + LocalDate.now().plusMonths(months), messages.getFirst());
+        assertEquals(LocalDate.now().plusMonths(months), extinguisher.getNextInspection());
     }
 
     @Test
@@ -112,10 +113,11 @@ class ExtinguisherServiceImplTest {
 
         when(extinguishers.findById("1")).thenReturn(Optional.of(extinguisher));
 
-        List<String> messages = extinguisherService.scheduleRegularInspectionsOfExtinguishers("1");
+        int months = 12;
+        List<String> messages = extinguisherService.scheduleRegularInspectionsOfExtinguishers("1", months);
 
         assertEquals(1, messages.size());
-        assertEquals("The extinguisher ID: " + extinguisher.getId() + " is not due for inspection.", messages.getFirst());
+        assertEquals("Extintor com o identificador: " + extinguisher.getId() + " não é devido para inspeção.", messages.getFirst());
     }
 
     @Test

@@ -74,7 +74,7 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
         List<Extinguisher> extinguisherList = extinguishers.findAll();
 
         if (extinguisherList.isEmpty()) {
-            return List.of("No extinguishers found.");
+            return List.of("Nenhum extintor encontrado.");
         }
 
         LocalDate currentDate = LocalDate.now();
@@ -85,10 +85,10 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
             LocalDate expirationDate = extinguisher.getExpirationDate();
 
             if (currentDate.isAfter(expirationDate) || currentDate.isEqual(expirationDate)) {
-                messages.add("The Extinguisher with ID " + extinguisher.getId() + " has expired.");
+                messages.add("O extintor com identificador: " + extinguisher.getId() + " está expirado.");
             }
             else if (currentDate.plusMonths(12).isBefore(expirationDate)) {
-                messages.add("The Extinguisher with ID " + extinguisher.getId() + " is within the expiration date.");
+                messages.add("O extintor com identificador: " + extinguisher.getId() + " está dentro do prazo de validade.");
             }
         }
         return messages;
@@ -100,7 +100,8 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     }
 
     @Override
-    public List<String> scheduleRegularInspectionsOfExtinguishers(String extinguisherId) {
+    @Transactional
+    public List<String> scheduleRegularInspectionsOfExtinguishers(String extinguisherId, int months) {
         Optional<Extinguisher> optionalExtinguisher = extinguishers.findById(extinguisherId);
         List<String> messages = new ArrayList<>();
 
@@ -109,15 +110,15 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
             LocalDate nextInspectionDate = extinguisher.getNextInspection();
             LocalDate currentDate = LocalDate.now();
 
-            if (nextInspectionDate.isAfter(currentDate.plusMonths(12))) {
-                messages.add("The extinguisher ID: " + extinguisher.getId() + " is not due for inspection.");
+            if (nextInspectionDate.isBefore(currentDate)) {
+                messages.add("Extintor com o identificador: " + extinguisher.getId() + " não é devido para inspeção.");
             } else {
-                extinguisher.setNextInspection(nextInspectionDate.plusMonths(12));
+                extinguisher.setNextInspection(nextInspectionDate.plusMonths(months));
                 extinguishers.save(extinguisher);
-                messages.add("Scheduled next inspection for extinguisher ID: " + extinguisher.getId() + " on " + extinguisher.getNextInspection());
+                messages.add("Próxima inspeção agendada para o extintor com identificador: " + extinguisher.getId() + " está marcada para dia " + extinguisher.getNextInspection());
             }
         } else {
-            messages.add("Extinguisher with ID: " + extinguisherId + " not found");
+            messages.add("Extintor com identificador: " + extinguisherId + " não encontrado");
         }
         return messages;
     }
