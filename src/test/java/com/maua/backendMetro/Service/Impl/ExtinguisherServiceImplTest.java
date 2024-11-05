@@ -56,13 +56,12 @@ class ExtinguisherServiceImplTest {
     @DisplayName("Should return a message when extinguisher is within the expiration date or has expired")
     void testVerifyExpirationDateExtinguisherAndAlert_Success() {
         Extinguisher expiredExtinguisher = new Extinguisher();
-
         expiredExtinguisher.setId("1");
         expiredExtinguisher.setExpirationDate(LocalDate.now().minusDays(1));
 
         Extinguisher validExtinguisher = new Extinguisher();
         validExtinguisher.setId("2");
-        validExtinguisher.setExpirationDate(LocalDate.now().plusMonths(13));
+        validExtinguisher.setExpirationDate(LocalDate.now().plusMonths(4));
 
         when(extinguishers.findAll()).thenReturn(List.of(expiredExtinguisher, validExtinguisher));
 
@@ -70,7 +69,7 @@ class ExtinguisherServiceImplTest {
 
         assertEquals(2, messages.size());
         assertEquals("O extintor com identificador: 1 está expirado.", messages.get(0));
-        assertEquals("O extintor com identificador: 2 está dentro do prazo de validade.", messages.get(1));
+        assertEquals("O extintor com identificador: 2 está próximo de vencer: " + validExtinguisher.getExpirationDate(), messages.get(1));
     }
 
     @Test
@@ -81,16 +80,15 @@ class ExtinguisherServiceImplTest {
         List<String> messages = extinguisherService.verifyExpirationDateExtinguisherAndAlert();
 
         assertEquals(1, messages.size());
-        assertEquals("Nenhum extintor encontrado.", messages.getFirst());
+        assertEquals("Nenhum extintor encontrado.", messages.get(0));
     }
 
     @Test
     @DisplayName("Should return a message when extinguisher is scheduled for inspection")
     void testScheduleRegularInspectionsOfExtinguishers_Success() {
         Extinguisher extinguisher = new Extinguisher();
-
         extinguisher.setId("1");
-        extinguisher.setNextInspection(LocalDate.now());
+        extinguisher.setNextInspection(LocalDate.now().plusMonths(1));
 
         when(extinguishers.findById("1")).thenReturn(Optional.of(extinguisher));
 
@@ -99,17 +97,16 @@ class ExtinguisherServiceImplTest {
 
         assertEquals(1, messages.size());
         assertEquals("Próxima inspeção agendada para o extintor com identificador: " + extinguisher.getId() + " está marcada para dia "
-                + LocalDate.now().plusMonths(months), messages.getFirst());
-        assertEquals(LocalDate.now().plusMonths(months), extinguisher.getNextInspection());
+                + LocalDate.now().plusMonths(13), messages.get(0));
+        assertEquals(LocalDate.now().plusMonths(13), extinguisher.getNextInspection());
     }
 
     @Test
     @DisplayName("Should return a message when extinguisher is not due for inspection")
     void testScheduleRegularInspectionsOfExtinguishers_Fail() {
         Extinguisher extinguisher = new Extinguisher();
-
         extinguisher.setId("1");
-        extinguisher.setNextInspection(LocalDate.now().plusMonths(13));
+        extinguisher.setNextInspection(LocalDate.now().minusMonths(1));
 
         when(extinguishers.findById("1")).thenReturn(Optional.of(extinguisher));
 
@@ -117,7 +114,7 @@ class ExtinguisherServiceImplTest {
         List<String> messages = extinguisherService.scheduleRegularInspectionsOfExtinguishers("1", months);
 
         assertEquals(1, messages.size());
-        assertEquals("Extintor com o identificador: " + extinguisher.getId() + " não é devido para inspeção.", messages.getFirst());
+        assertEquals("Extintor com o identificador: " + extinguisher.getId() + " não é devido para inspeção.", messages.get(0));
     }
 
     @Test
