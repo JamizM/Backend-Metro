@@ -87,7 +87,7 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
             if (currentDate.isAfter(expirationDate) || currentDate.isEqual(expirationDate)) {
                 messages.add("O extintor com identificador: " + extinguisher.getId() + " está expirado.");
             }
-            else if (currentDate.plusMonths(3).isBefore(expirationDate)) {
+            else if (currentDate.plusMonths(3).isAfter(expirationDate)) {
                 messages.add("O extintor com identificador: " + extinguisher.getId() + " está próximo de vencer: " + expirationDate);
             }
         }
