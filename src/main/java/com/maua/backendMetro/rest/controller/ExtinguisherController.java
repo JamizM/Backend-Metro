@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -145,8 +146,8 @@ public class ExtinguisherController {
 
     @PostMapping("/Schedule-Regular-Inspections")
     @ResponseStatus(HttpStatus.OK)
-    public List<String> scheduleRegularInspections(@RequestParam String extinguisherId) {
-        return extinguisherService.scheduleRegularInspectionsOfExtinguishers(extinguisherId);
+    public List<String> scheduleRegularInspections(@RequestParam String extinguisherId, @RequestParam int months) {
+        return extinguisherService.scheduleRegularInspectionsOfExtinguishers(extinguisherId, months);
     }
 
     @GetMapping("/{extinguisherId}/qrcode")

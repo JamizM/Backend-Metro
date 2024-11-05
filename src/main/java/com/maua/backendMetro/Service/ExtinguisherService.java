@@ -10,6 +10,7 @@ import com.maua.backendMetro.util.MessageWriterEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public interface ExtinguisherService {
 
     List<Extinguisher> findExtinguisherByExtinguisherStatus(@RequestParam ExtinguisherStatus extinguisherStatus);
 
-    List<String> scheduleRegularInspectionsOfExtinguishers(String extinguisherId);
+    List<String> scheduleRegularInspectionsOfExtinguishers(String extinguisherId, int months);
 
     byte[] generateQRCodeForExtinguisher(String extinguisherId) throws IOException, WriterException;
 }
