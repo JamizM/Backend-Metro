@@ -63,13 +63,17 @@ class ExtinguisherServiceImplTest {
         validExtinguisher.setId("2");
         validExtinguisher.setExpirationDate(LocalDate.now().plusMonths(4));
 
-        when(extinguishers.findAll()).thenReturn(List.of(expiredExtinguisher, validExtinguisher));
+        Extinguisher nearExpiryExtinguisher = new Extinguisher();
+        nearExpiryExtinguisher.setId("3");
+        nearExpiryExtinguisher.setExpirationDate(LocalDate.now().plusMonths(2));
+
+        when(extinguishers.findAll()).thenReturn(List.of(expiredExtinguisher, validExtinguisher, nearExpiryExtinguisher));
 
         List<String> messages = extinguisherService.verifyExpirationDateExtinguisherAndAlert();
 
         assertEquals(2, messages.size());
         assertEquals("O extintor com identificador: 1 está expirado.", messages.get(0));
-        assertEquals("O extintor com identificador: 2 está próximo de vencer: " + validExtinguisher.getExpirationDate(), messages.get(1));
+        assertEquals("O extintor com identificador: 3 está próximo de vencer: " + nearExpiryExtinguisher.getExpirationDate(), messages.get(1));
     }
 
     @Test
