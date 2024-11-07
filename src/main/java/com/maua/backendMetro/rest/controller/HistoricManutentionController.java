@@ -56,13 +56,15 @@ public class HistoricManutentionController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     public void updateHistoricManutentions(@PathVariable Long id, @RequestBody HistoricManutention historicManutention){
         historicManutentions.findById(id)
-                .map(historicManutention1 -> {
-                    historicManutention1.setIdManutention(historicManutention1.getIdManutention());
-                    historicManutentions.save(historicManutention1);
-                    return historicManutention;
+                .map(existingHistoricManutention -> {
+                    existingHistoricManutention.setDescription(historicManutention.getDescription());
+                    existingHistoricManutention.setResponsible(historicManutention.getResponsible());
+                    existingHistoricManutention.setMaintenanceDate(historicManutention.getMaintenanceDate());
+                    historicManutentions.save(existingHistoricManutention);
+                    return existingHistoricManutention;
                 })
                 .orElseThrow(() -> new EntityNotFoundException("HistoricManutention not found"));
     }
