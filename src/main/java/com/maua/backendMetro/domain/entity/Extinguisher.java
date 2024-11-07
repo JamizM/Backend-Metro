@@ -1,5 +1,6 @@
 package com.maua.backendMetro.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherType;
 import com.maua.backendMetro.util.ValidExtinguisherDates;
@@ -65,7 +66,8 @@ public class Extinguisher {
     @JoinColumn(name = "id_localization")
     private Localization localization;
 
-    @OneToMany(mappedBy = "extinguisher", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "extinguisher", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonManagedReference
     private List<HistoricManutention> historicManutention;
 
     @OneToOne(mappedBy = "extinguisher")

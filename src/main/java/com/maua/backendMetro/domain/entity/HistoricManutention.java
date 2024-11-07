@@ -1,5 +1,6 @@
 package com.maua.backendMetro.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
@@ -18,7 +19,8 @@ public class HistoricManutention {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idManutention;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name = "id_extinguisher")
     private Extinguisher extinguisher;
 
