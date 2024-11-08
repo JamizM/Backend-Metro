@@ -31,4 +31,6 @@ public interface ExtinguisherService {
     List<String> scheduleRegularInspectionsOfExtinguishers(String extinguisherId, int months);
 
     byte[] generateQRCodeForExtinguisher(String extinguisherId) throws IOException, WriterException;
+
+    void logDeletion(String extinguisherId, String userName, String reason);
 }

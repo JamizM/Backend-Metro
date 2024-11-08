@@ -60,9 +60,11 @@ public class ExtinguisherController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteExtinguisher(@PathVariable String id){
+    public void deleteExtinguisher(@PathVariable String id, @RequestParam String userName, @RequestParam String reason) {
         extinguishers.findById(id)
-                .map(extinguisher -> {extinguishers.delete(extinguisher);
+                .map(extinguisher -> {
+                    extinguishers.delete(extinguisher);
+                    extinguisherService.logDeletion(id, userName, reason);
                     return extinguisher;
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Extinguisher not found"));

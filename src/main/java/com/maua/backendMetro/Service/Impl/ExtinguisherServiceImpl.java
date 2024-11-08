@@ -3,12 +3,14 @@ package com.maua.backendMetro.Service.Impl;
 import com.google.zxing.WriterException;
 import com.maua.backendMetro.Service.ExtinguisherService;
 import com.maua.backendMetro.Service.QRCodeService;
+import com.maua.backendMetro.domain.entity.DeletionLog;
 import com.maua.backendMetro.domain.entity.Extinguisher;
 import com.maua.backendMetro.domain.entity.HistoricManutention;
 import com.maua.backendMetro.domain.entity.Localization;
 import com.maua.backendMetro.domain.entity.enums.ExtinguisherStatus;
 import com.maua.backendMetro.domain.entity.enums.MetroLine;
 import com.maua.backendMetro.domain.entity.enums.SubwayStation;
+import com.maua.backendMetro.domain.repository.DeletionLogRepository;
 import com.maua.backendMetro.domain.repository.Extinguishers;
 import com.maua.backendMetro.domain.repository.HistoricManutentions;
 import com.maua.backendMetro.domain.repository.Localizations;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,16 +41,18 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
     private final Localizations localizations;
     private final HistoricManutentions historicManutentions;
     private final QRCodeService qrCodeService;
+    private final DeletionLogRepository deletionLogRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Autowired
-    public ExtinguisherServiceImpl(Extinguishers extinguishers, Localizations localizations, HistoricManutentions historicManutentions, @Qualifier("QRCodeServiceImpl") QRCodeService qrCodeService) {
+    public ExtinguisherServiceImpl(Extinguishers extinguishers, Localizations localizations, HistoricManutentions historicManutentions, @Qualifier("QRCodeServiceImpl") QRCodeService qrCodeService, DeletionLogRepository deletionLogRepository) {
         this.extinguishers = extinguishers;
         this.localizations = localizations;
         this.historicManutentions = historicManutentions;
         this.qrCodeService = qrCodeService;
+        this.deletionLogRepository = deletionLogRepository;
     }
 
     @Override
@@ -142,4 +147,16 @@ public class ExtinguisherServiceImpl implements ExtinguisherService {
 
         return qrCodeService.generateAndSaveQRCodeWithExtintorId(qrText.toString(), 350, 350);
     }
+
+    @Override
+    @Transactional
+    public void logDeletion(String extinguisherId, String userName, String reason) {
+        DeletionLog deletionLog = new DeletionLog();
+        deletionLog.setExtinguisher(extinguisherId);
+        deletionLog.setUserName(userName);
+        deletionLog.setDeletionReason(reason);
+        deletionLog.setDeletionDate(LocalDateTime.now());
+        deletionLogRepository.save(deletionLog);
+    }
+
 }
