@@ -77,7 +77,7 @@ public class Roles {
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // Para testes (sem criptografia)
+        return NoOpPasswordEncoder.getInstance();
     }
 
 }
